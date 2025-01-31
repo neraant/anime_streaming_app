@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
   ],
 
-  // Прокси для запросов (обход CORS)
+  //  Прокси для запросов (обход CORS)
   // server: {
   //   proxy: {
   //     '/api': {

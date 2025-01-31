@@ -9,11 +9,10 @@ const AnimeList = ({ animeInput }) => {
 	const [isFading, setIsFading] = useState(false)
 	const [page, setPage] = useState(1)
 	const {data, isLoading, isError} = useQuery(
-		['animeList'],
-		() => fetchAllAnimeData(),
+		['animeList', debouncedAnimeInput],
+		() => fetchAllAnimeData(debouncedAnimeInput),
 		{ keepPreviousData: true, refetchOnWindowFocus: false }
 	)
-	console.log("animeList: ", data);
 
 	// const {data, isLoading, isError} = useQuery(
 	// 	['animeList', debouncedAnimeInput],
