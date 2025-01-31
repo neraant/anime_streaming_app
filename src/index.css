@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+* {
+	box-sizing: border-box;
+}
+
+@font-face {
+	font-family: 'axiforma-regular';
+	src: url('/fonts/Axiforma/Axiforma-Regular.woff2') format('woff2'),
+			 url('/fonts/Axiforma/Axiforma-Regular.woff') format('woff'),
+			 url('/fonts/Axiforma/Axiforma-Regular.ttf') format('truetype'),
+			 url('/fonts/Axiforma/Axiforma-Regular.eot') format('eot');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'axiforma-bold';
+	src: url('/fonts/Axiforma/Axiforma-Bold.woff2') format('woff2'),
+			 url('/fonts/Axiforma/Axiforma-Bold.woff') format('woff'),
+			 url('/fonts/Axiforma/Axiforma-Bold.ttf') format('truetype'),
+			 url('/fonts/Axiforma/Axiforma-Bold.eot') format('eot');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@theme {
+	--font-axiforma: "axiforma-regular", "sans-serif"; 
+	--font-axiformaBold: "axiforma-bold", "sans-serif";
+	--color-gray-900: #0f0f11;
+	--color-gray-800: #18181B;
+	--color-gray-700: #6C6C6C;
+	--color-gray-500: #848484;
+	--color-gray-400: #828282;
+	--color-gray-300: #8F8F8F;
+}
+
+.gradient-border {
+	@apply bg-gradient-to-r from-[#19A1BE] to-[#7D4192]
+}
+
+.flex-center {
+	@apply flex items-center justify-center 
+}
+
+body {
+	position: relative;
+	min-height: 100dvh;
+	overflow-x: hidden;
+
+	@apply bg-gray-800 font-axiforma
+}
+
+.screen-max-width {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+#root {
+	min-height: 100dvh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
