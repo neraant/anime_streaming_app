@@ -14,12 +14,12 @@ const queryClient = new QueryClient()
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <WelcomePage />,
     errorElement: <NotFound />,
   },
   {
-    path: '/welcome',
-    element: <WelcomePage />,
+    path: '/anime',
+    element: <App />,
     errorElement: <NotFound />,
   },
   {

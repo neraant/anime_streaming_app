@@ -6,7 +6,7 @@ const AnimeDetails = ({ anime }) => {
 					<img 
 						src={`https://anilibria.tv${anime.posters.original.url || anime.posters.medium.url}`} 
 						alt="poster" 
-						className='w-full h-full object-cover max-w-[300px] max-h-[420px] rounded-md'
+						className='w-full h-full object-cover min-w-[250px] max-w-[250px] max-h-[420px] rounded-md shrink-0'
 					/>
 
 					{anime.score && (
@@ -35,23 +35,23 @@ const AnimeDetails = ({ anime }) => {
 					<div className="grid grid-cols-6 w-full">
 						<div className="grid grid-cols-1 col-span-3 md:col-span-2 gap-y-4">
 							<span className='text-gray-300 font-axiforma text-sm'>
-								Type
+								Тип
 							</span>
 
 							<span className='text-gray-300 font-axiforma text-sm'>
-								Year of release
+								Год
 							</span>
 
 							<span className='text-gray-300 font-axiforma text-sm'>
-								Status
+								Статус
 							</span>
 
 							<span className='text-gray-300 font-axiforma text-sm'>
-								Episodes
+								Эпизоды
 							</span>
 
 							<span className='text-gray-300 font-axiforma text-sm'>
-								Duration
+								Длительность
 							</span>
 						</div>
 
@@ -76,6 +76,16 @@ const AnimeDetails = ({ anime }) => {
 								{anime.type.length ? `${anime.type.length} мин.` : "no information"}
 							</span>
 						</div>
+					</div>
+
+					<div className="flex flex-col gap-2 mt-6">
+						<h5 className='text-purple-500'>
+							Описание
+						</h5>
+
+						<p className='text-gray-200'>
+							{anime.description}
+						</p>
 					</div>
 				</div>
 			</div>

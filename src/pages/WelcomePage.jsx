@@ -61,30 +61,33 @@ const WelcomePage = () => {
 		animRef.current.play()
 
 		setTimeout(() => {	
-			navigate('/')
+			navigate('/anime')
 		}, 600)
 	}
 
 	return (
 		<main ref={mainRef} className='main-anim flex-center flex-col h-[100dvh]'>
-			<img 
-				className='img-anim opacity-0 scale-[0.7]'
-				src="./images/welcome_bg.png" 
-				alt="welcome"
-			/>
+			<div className="img-anim opacity-0 scale-[0.6] w-full realtive">
+				<div className="bg-purple-500 rounded-full w-[380px] h-[380px] absolute z-0 top-[-10%]" />
+				
+				<img 
+					className='relative z-1'
+					src="./images/welcome_bg.png" 
+					alt="welcome"
+				/>
+			</div>
 			
 			<div className="screen-max-width flex flex-col items-center div-anim opacity-0 translate-y-[20px]">
 				<h1 className='font-axiformaBold text-3xl text-center text-white mb-5 mt-5'>
-					Onboarding
+					Регистрация
 				</h1>
 
 				<p className='text-white text-base text-center mb-8'>
-					Watch everything you want
-					for free!
+					Смотри аниме здесь с AniLibria!
 				</p>
 
 				<button
-				onClick={handleButtonClick} 
+					onClick={handleButtonClick} 
 					className="font-axiformaBold text-center text-base text-white p-[2px] gradient-border w-full h-full rounded-full cursor-pointer relative"
 				>
 					<div className="absolute top-[15px] left-[-20px] bg-[#19A1BE] h-[86px] w-[60%] rounded-full opacity-40 blur-2xl pointer-events-none left-shadow" />
@@ -92,7 +95,7 @@ const WelcomePage = () => {
 					<div className="rounded-full bg-gray-800 py-2 w-full h-[40px] pointer-events-none" />
 
 					<div className="absolute top-[12px] left-[50%] -translate-x-[50%]">
-						Enter now
+						Смореть
 					</div>
 					
 					<div className="absolute top-[-15px] right-[-20px] bg-[#7D4192] h-[60px] w-[60%] rounded-full opacity-40 blur-2xl pointer-events-none right-shadow" />

@@ -2,12 +2,14 @@ import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_ANILIBRIA_BASE_API_URL
 
-export const fetchAllAnimeData = async (animeName = '') => {
+export const fetchAllAnimeData = async ({animeName = '', page = 1}) => {
 	let url = `${BASE_URL}/title/updates`
 	
 	const params = {
 		limit: 20,
 		filter: 'id,names,genres,posters,season',
+		page: 1,
+		items_per_page: 20,
 	}
 
 	if(animeName) {

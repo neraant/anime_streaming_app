@@ -1,3 +1,4 @@
+import { FaRightToBracket } from 'react-icons/fa6'
 import { useSidabar } from '../contexts/SidebarContext'
 
 const Sidebar = () => {
@@ -12,7 +13,7 @@ const Sidebar = () => {
 			
 			<div className='absolute left-0 top-0 w-[100dvw] z-50 max-w-[350px] bg-gray-900 h-[100dvh] shadow-inner py-8'>
 				
-				<a href="/">
+				<a href="/anime">
 					<h1 className='text-white font-axiforma text-5xl mb-8 px-8'>
 						AniAnt
 					</h1>
@@ -21,7 +22,7 @@ const Sidebar = () => {
 				<ul className='flex flex-col h-[calc(100%-100px)]'>
 					<li className='text-white text-base flex items-center'>
 						<a href="#" className='w-full py-4 px-8 transition-bg duration-300 hover:bg-[#ffffff40]'>
-							Anime
+							Аниме
 						</a>
 					</li>
 
@@ -29,7 +30,7 @@ const Sidebar = () => {
 
 					<li className='text-white text-base flex items-center'>
 						<a href="#" className='w-full py-4 px-8 transition-bg duration-300 hover:bg-[#ffffff40]'>
-							Favourites
+							Любимые
 						</a>
 					</li>
 
@@ -37,13 +38,14 @@ const Sidebar = () => {
 
 					<li className='text-white text-base flex items-center'>
 						<a href="#" className='w-full py-4 px-8 transition-bg duration-300 hover:bg-[#ffffff40]'>
-							History
+							История
 						</a>
 					</li>
 
 					<li className='text-white text-base mt-auto px-8'>
-						<a href="#" >
-							Logout
+						<a href="#" className='flex gap-2' >
+							<FaRightToBracket fontSize={20} />
+							Выйти
 						</a>
 					</li>
 				</ul>
