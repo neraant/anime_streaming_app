@@ -5,7 +5,7 @@ const Sidebar = () => {
 	const {isSidebar, setIsSidebar} = useSidabar()
 	
 	return (
-		<aside className={`absolute top-0 left-0 w-full h-[100dvh] transition-all duration-500 ${isSidebar ? 'left-0' : 'left-[-100%]'}`}>
+		<aside className={`absolute top-0 left-0 w-full h-[100dvh] transition-all duration-500 ${isSidebar ? 'left-0' : 'left-[-120%]'}`}>
 			<div 
 				className={`absolute top-0 right-[-350px] z-20 w-[100dvw] h-full bg-gray-900 transition-all duration-500 ${isSidebar ? 'opacity-50' : 'opacity-0 pointer-events-none'}`} 
 				onClick={() => setIsSidebar(false)}

@@ -8,7 +8,7 @@ export const fetchAllAnimeData = async ({animeName = '', page = 1}) => {
 	const params = {
 		limit: 20,
 		filter: 'id,names,genres,posters,season',
-		page: 1,
+		page,
 		items_per_page: 20,
 	}
 
@@ -30,7 +30,7 @@ export const fetchAnimeData = async (animeId) => {
 	try {
 		const { data } = await axios.get(`${BASE_URL}/title?id=${animeId}`, {
 			params: {
-				filter: 'id,names,genres,posters,type,status,player.list.24,description,season'
+				filter: 'id,names,genres,posters,type,status,player,description,season'
 			}
 		})
 		return data

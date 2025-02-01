@@ -13,11 +13,12 @@ const AnimeList = ({ animeInput }) => {
 	const [page, setPage] = useState(1)
 	const {data, isLoading, isError} = useQuery(
 		['animeList', debouncedAnimeInput, page],
-		() => fetchAllAnimeData({animeName: debouncedAnimeInput, page}),
+		() => fetchAllAnimeData({animeName: debouncedAnimeInput.trim(), page}),
 		{ keepPreviousData: true, refetchOnWindowFocus: false }
 	)
 
 	useEffect(() => {
+		setPage(1)
 		if(animeInput != debouncedAnimeInput) {
 			setIsSearching(true)
 		} else {
@@ -44,13 +45,13 @@ const AnimeList = ({ animeInput }) => {
 		return (
 			<div className="screen-max-width w-full">
 				<h3 className='text-3xl text-white font-axiformaBold mb-4'>
-					Anime
+					Аниме
 				</h3>
 
-				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-6 gap-x-3 pb-11">
+				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-3 pb-11">
 					{Array.from({ length: 8 }).map((_, index) => (
 						<div key={index} className="rounded-lg overflow-hidden w-full">
-							<div className="bg-gray-700 w-full h-[300px] rounded-lg animate-pulse" />
+							<div className="bg-gray-700 w-full h-[380px] rounded-lg animate-pulse" />
 
 							<div className="w-[80%] mt-2 bg-gray-700 h-4 rounded-md animate-pulse" />
 
@@ -88,23 +89,29 @@ const AnimeList = ({ animeInput }) => {
 	return (
 		<div className="screen-max-width w-full">
 			<div className="pb-8">
-				<h3 className='flex items-center gap-2 text-3xl text-white font-axiformaBold mb-4'>
-					Anime 
-					<span className='text-purple-500 text-sm mt-auto mb-[6px]'>
-						({data.pagination.total_items})
-					</span>
-					{isSearching && (
-						<FaSpinner className='animate-spin' fontSize={24} />
-					)}
-				</h3>
+				<div className="flex justify-between items-center">
+					<h3 className='flex items-center gap-2 text-3xl text-white font-axiformaBold mb-4'>
+						Аниме 
+						<span className='text-purple-500 text-sm mt-auto mb-[6px]'>
+							({data.pagination.total_items})
+						</span>
+						{isSearching && (
+							<FaSpinner className='animate-spin' fontSize={24} />
+						)}
+					</h3>
+
+					<div className="flex items-center">
+						
+					</div>
+				</div>
 
 				{data && !(data.list.length) ? (
 						<span className='text-white text-xl mb-4'>
 							Аниме по такому запросу не найдено🙄
 						</span>
 				) : (
-					<>
-						<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-6 gap-x-3'>
+					<div className='flex flex-col items-center w-full'>
+						<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-3'>
 							{data && data.list.flat().map((anime, index) => (
 								<AnimeListItem
 									key={index} 
@@ -114,7 +121,7 @@ const AnimeList = ({ animeInput }) => {
 							))}
 						</div>
 
-						<div className="flex gap-2 items-center mt-7">
+						<div className="flex gap-2 items-center mt-7 w-full">
 							<button 
 								className='cursor-pointer p-1 bg-purple-500 rounded-lg'
 								onClick={() => setPage(prev => prev - 1)}
@@ -135,7 +142,7 @@ const AnimeList = ({ animeInput }) => {
 								<img src="/images/pagination-arrow_icon.svg" alt="next" width={28} height={28} style={{transform: "rotate(180deg)"}}/>
 							</button>
 						</div>
-					</>
+					</div>
 				)}
 			</div>
 		</div>

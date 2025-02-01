@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 
-const AnimeListItem = ({ anime, index, isFading }) => {
+const AnimeListItem = ({ anime, isFading }) => {
 	return (
 		<Link 
 			to={`/anime/${anime.names.en}?id=${anime.id}`} 
-			className={`flex flex-col rounded-lg overflow-hidden w-full max-w-[270px] relative transition-opacity duration-300 ${isFading ? 'opacity-0' : 'opacity-100'}`}
+			className={`flex flex-col rounded-lg overflow-hidden w-full max-w-[300px] relative transition-opacity duration-300 ${isFading ? 'opacity-0' : 'opacity-100'}`}
 		>
-			<div className="w-full min-h-[300px] max-h-[300px] rounded-lg overflow-hidden">
+			<div className="w-full min-h-[380px] max-h-[380px] rounded-lg overflow-hidden">
 				<img 
 					src={`https://anilibria.tv${anime.posters.original.url}` || null}
 					className='bg-gray-700 w-full h-full object-cover transition-all duration-300 hover:scale-[1.05] hover:brightness-70'
