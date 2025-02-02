@@ -8,7 +8,10 @@ const openai = new OpenAI({
 	baseURL: BASE_URL,
 	apiKey: API_KEY,
 	dangerouslyAllowBrowser: true,
-	defaultHeaders: {},
+	defaultHeaders: {
+    'Authorization': `Bearer ${API_KEY}`,
+    'Content-Type': 'application/json',
+  },
 })
 
 export const fetchAiAnswer = async (userQuestion) => {
