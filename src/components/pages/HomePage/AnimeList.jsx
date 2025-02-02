@@ -1,34 +1,28 @@
 import { useEffect, useState } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { FaRotate } from 'react-icons/fa6';
-import { useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { useDebounce } from 'use-debounce';
-import { fetchAllAnimeData } from '../api/anilibriaApi';
+import { fetchAllAnimeData } from '../../../api/anilibriaApi';
 import AnimeListItem from './AnimeListItem';
 
 const AnimeList = ({ animeInput }) => {
 	const [debouncedAnimeInput] = useDebounce(animeInput, 700)
-	const [isSearching, setIsSearching] = useState(false)
 	const [isFading, setIsFading] = useState(false)
 	const [page, setPage] = useState(1)
-	const {data, isLoading, isError} = useQuery(
-		['animeList', debouncedAnimeInput, page],
-		() => fetchAllAnimeData({animeName: debouncedAnimeInput.trim(), page}),
-		{ keepPreviousData: true, refetchOnWindowFocus: false }
+
+	const { mutate, data, isLoading, isError } = useMutation(
+		({ animeName, page }) => fetchAllAnimeData({ animeName, page })
 	)
 
 	useEffect(() => {
-		setPage(1)
-		if(animeInput != debouncedAnimeInput) {
-			setIsSearching(true)
-		} else {
-			setIsSearching(false)
-		}
-	}, [animeInput, debouncedAnimeInput])
+    setPage(1);
+  }, [debouncedAnimeInput]);
 
 	useEffect(() => {
+    mutate({ animeName: debouncedAnimeInput.trim(), page });
 		window.scrollTo({ top: 0, behavior: 'smooth' })
-	}, [page])
+	}, [debouncedAnimeInput, page]);
 
 	useEffect(() => {
 		setIsFading(true)
@@ -44,20 +38,45 @@ const AnimeList = ({ animeInput }) => {
 	if(isLoading) {
 		return (
 			<div className="screen-max-width w-full">
-				<h3 className='text-3xl text-white font-axiformaBold mb-4'>
+				<h3 className='flex items-center gap-2 text-3xl text-white font-axiformaBold mb-4'>
 					Аниме
+					{isLoading && (
+						<FaSpinner className='animate-spin' fontSize={24} />
+					)}
 				</h3>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-3 pb-11">
-					{Array.from({ length: 8 }).map((_, index) => (
-						<div key={index} className="rounded-lg overflow-hidden w-full">
-							<div className="bg-gray-700 w-full h-[380px] rounded-lg animate-pulse" />
+				<div className="pb-8">
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-3">
+						{Array.from({ length: 20 }).map((_, index) => (
+							<div key={index} className="rounded-lg overflow-hidden w-full">
+								<div className="bg-gray-700 w-full h-[380px] rounded-lg animate-pulse" />
 
-							<div className="w-[80%] mt-2 bg-gray-700 h-4 rounded-md animate-pulse" />
+								<div className="w-[80%] mt-2 bg-gray-700 h-4 rounded-md animate-pulse" />
 
-							<div className="w-[30%] mt-2 bg-gray-700 h-4 rounded-md animate-pulse" />
+								<div className="w-[30%] mt-2 bg-gray-700 h-4 rounded-md animate-pulse" />
+							</div>
+						))}
+					</div>
+
+					<div className="flex gap-2 items-center mt-7 w-full">
+						<button 
+							className='cursor-pointer p-1 bg-purple-500 rounded-lg'
+							disabled
+						>
+							<img src="/images/pagination-arrow_icon.svg" alt="back" width={28} height={28}/>
+						</button>
+
+						<div className="text-white ml-auto mr-auto">
+							Page 0 of 0
 						</div>
-					))}
+
+						<button 
+							className='cursor-pointer p-1 bg-purple-500 rounded-lg'
+							disabled
+						>
+							<img src="/images/pagination-arrow_icon.svg" alt="next" width={28} height={28} style={{transform: "rotate(180deg)"}}/>
+						</button>
+					</div>
 				</div>
 			</div>
 		)
@@ -83,7 +102,7 @@ const AnimeList = ({ animeInput }) => {
 			</div>
 		)
 	}
-	
+
 	const lastPage = data.pagination?.pages || 1;
 
 	return (
@@ -95,13 +114,10 @@ const AnimeList = ({ animeInput }) => {
 						<span className='text-purple-500 text-sm mt-auto mb-[6px]'>
 							({data.pagination.total_items})
 						</span>
-						{isSearching && (
-							<FaSpinner className='animate-spin' fontSize={24} />
-						)}
 					</h3>
 
 					<div className="flex items-center">
-						
+						{/* Фильтрация */}
 					</div>
 				</div>
 

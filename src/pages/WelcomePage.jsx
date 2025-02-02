@@ -66,7 +66,7 @@ const WelcomePage = () => {
 	}
 
 	return (
-		<main ref={mainRef} className='main-anim flex-center flex-col h-[100dvh]'>
+		<div ref={mainRef} className='main-anim flex-center flex-col h-[100dvh]'>
 			<div className="img-anim opacity-0 scale-[0.6] w-full realtive">
 				<div className="bg-purple-500 rounded-full w-[380px] h-[380px] absolute z-0 top-[-10%]" />
 				
@@ -101,7 +101,7 @@ const WelcomePage = () => {
 					<div className="absolute top-[-15px] right-[-20px] bg-[#7D4192] h-[60px] w-[60%] rounded-full opacity-40 blur-2xl pointer-events-none right-shadow" />
 				</button>
 			</div>
-		</main>
+		</div>
 	)
 }
 

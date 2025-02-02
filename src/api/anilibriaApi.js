@@ -18,7 +18,12 @@ export const fetchAllAnimeData = async ({animeName = '', page = 1}) => {
 	}
 
 	try {
-		const { data } = await axios.get(url, { params })
+		const { data } = await axios.get(url, { 
+			params, 
+			headers: {
+				'Accept-Encoding': 'gzip, deflate, br',
+			} 
+		})
 		return data
 	} catch (error) {
 		console.error(error.message)
@@ -26,7 +31,6 @@ export const fetchAllAnimeData = async ({animeName = '', page = 1}) => {
 }
 
 export const fetchAnimeData = async (animeId) => {
-	console.log("BASE_URL:", BASE_URL);
 	try {
 		const { data } = await axios.get(`${BASE_URL}/title?id=${animeId}`, {
 			params: {

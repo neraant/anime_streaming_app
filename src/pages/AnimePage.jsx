@@ -2,9 +2,9 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { fetchAnimeData } from '../api/anilibriaApi';
-import AnimeDetails from '../components/AnimeDetails';
-import Layout from '../components/Layout';
-import VideoPlayer from '../components/VideoPlayer';
+import Layout from '../components/common/Layout';
+import AnimeDetails from '../components/pages/AnimePage/AnimeDetails';
+import VideoPlayer from '../components/pages/AnimePage/VideoPlayer';
 
 const useQueryParams = () => {
 	return new URLSearchParams(useLocation().search)

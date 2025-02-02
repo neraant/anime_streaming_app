@@ -1,9 +1,9 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap/gsap-core'
 import { useState } from 'react'
-import AnimeList from '../components/AnimeList'
-import HomeContent from '../components/HomeContent'
-import Layout from '../components/Layout'
+import Layout from '../components/common/Layout'
+import AnimeList from '../components/pages/HomePage/AnimeList'
+import HomeContent from '../components/pages/HomePage/HomeContent'
 
 const Home = () => {
 	const [animeInput, setAnimeInput] = useState("")

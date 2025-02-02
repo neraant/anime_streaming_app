@@ -1,7 +1,7 @@
 
 const HomeContent = ({ animeInput, setAnimeInput }) => {
 	return (
-		<main className='pb-11 w-full'>
+		<div className='pb-11 w-full'>
 			<div className="screen-max-width">
 				<h5 className='text-white text-base mb-3'>
 					Поиск
@@ -25,7 +25,7 @@ const HomeContent = ({ animeInput, setAnimeInput }) => {
 					<div className="absolute top-[0px] right-[-20px] bg-[#7D4192] h-[60px] w-[60%] rounded-full opacity-40 blur-2xl pointer-events-none" />
 				</div>
 			</div>
-		</main>
+		</div>
 	)
 }
 

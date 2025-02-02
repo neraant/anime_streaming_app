@@ -63,3 +63,32 @@ body {
 	align-items: center;
 }
 
+video::-webkit-media-controls {
+	display: none !important;
+}
+
+#ai-box::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar {
+	width: 10px !important;
+}
+
+#ai-box::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-track {
+	background: #f1f1f1 !important;
+	border-radius: 5px !important;
+}
+
+#ai-box::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb {
+	background: #6C6C6C !important;
+	border-radius: 5px !important;
+}
+
+#ai-box::-webkit-scrollbar-thumb,
+textarea::-webkit-scrollbar-thumb:hover {
+	background: #555 !important;
+}
+
+#ai-box li {
+	padding: 10px 0;
+}

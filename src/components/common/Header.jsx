@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSidabar } from '../contexts/SidebarContext'
+import { useSidabar } from '../../contexts/SidebarContext'
 import userIcon from '/images/user_icon.svg'
 
 const Header = () => {
@@ -49,6 +49,7 @@ const Header = () => {
 					)}
 
 					<button 
+						type='button'
 						className='ml-auto md:ml-0 flex flex-col items-end w-6 h-full cursor-pointer'
 						onClick={() => setIsSidebar(prev => !prev)}
 					>

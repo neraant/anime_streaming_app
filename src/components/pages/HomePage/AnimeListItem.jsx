@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom'
 
 const AnimeListItem = ({ anime, isFading }) => {
 	return (
-		<Link 
-			to={`/anime/${anime.names.en}?id=${anime.id}`} 
+		<a 
+			href={`/anime/${anime.names.en}?id=${anime.id}`} 
 			className={`flex flex-col rounded-lg overflow-hidden w-full max-w-[300px] relative transition-opacity duration-300 ${isFading ? 'opacity-0' : 'opacity-100'}`}
 		>
 			<div className="w-full min-h-[380px] max-h-[380px] rounded-lg overflow-hidden">
@@ -33,7 +32,7 @@ const AnimeListItem = ({ anime, isFading }) => {
 					</span>
 				</div>
 			)}
-		</Link>
+		</a>
 	)
 }
 
