@@ -23,8 +23,8 @@ const AnimePage = () => {
 	if(isLoading) {
 		return (
 			<Layout>
-				<div className="screen-max-width">
-					<div className='flex flex-col items-center md:flex-row md:items-start gap-4 w-full'>
+				<div className="screen-max-width relative">
+					<div className='flex flex-col items-center md:flex-row md:items-start gap-4 w-full mb-6'>
 						<div className='flex flex-col'>
 							<div className='w-[250px] h-[355px] rounded-md bg-gray-700 animate-pulse' />
 						</div>
@@ -58,6 +58,8 @@ const AnimePage = () => {
 							</div>
 						</div>
 					</div>
+
+					<div className='w-full h-[200px] bg-gradient-to-b from-transparent to-gray-800 absolute bottom-[0px] left-0 ' />
 				</div>
 			</Layout>
 		)

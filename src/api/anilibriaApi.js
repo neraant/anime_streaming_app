@@ -21,7 +21,7 @@ export const fetchAllAnimeData = async ({animeName = '', page = 1}) => {
 		const { data } = await axios.get(url, { 
 			params, 
 			headers: {
-				'Accept-Encoding': 'gzip, deflate, br',
+				// 'Accept-Encoding': 'gzip, deflate, br',
 			} 
 		})
 		return data

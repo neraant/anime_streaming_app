@@ -43,11 +43,14 @@
 }
 
 body {
-	position: relative;
 	min-height: 100dvh;
+	max-width: 100vw;
 	overflow-x: hidden;
 
 	@apply bg-gray-800 font-axiforma
+}
+body.sidebar {
+	overflow: hidden;
 }
 
 .screen-max-width {

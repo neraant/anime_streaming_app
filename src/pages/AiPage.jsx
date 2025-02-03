@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaArrowRight, FaBrain, FaSpinner, FaUser } from 'react-icons/fa6';
 import ReactMarkdown from 'react-markdown';
 import { useMutation } from 'react-query';
@@ -16,6 +16,8 @@ const isKeywordsIncludesWord = (message) => {
 const AiPage = () => {
 	const [userMessage, setUserMessage] = useState("")
 	const [messages, setMessages] = useState([])
+	const chatDiv = useRef()
+
 	const { mutate, data, isLoading, isError } = useMutation(fetchAiAnswer, {
 		onSuccess: (data) => {
 			setMessages(prev => ([
@@ -55,11 +57,24 @@ const AiPage = () => {
 		setUserMessage("")
 	}
 
+	useEffect(() => {
+		if(chatDiv.current) {
+			chatDiv.current.scrollTo({ top: chatDiv.current.scrollHeight, behavior: "smooth" })
+		}
+	}, [messages])
+
+	if(isError) {
+		setMessages(prev => ([
+			...prev,
+			{role: "assistant", content: "Кажется что-то пошло не так, попробуйте в другой раз!😊"},
+		]))
+	}
+
 	return (
 		<Layout>
 			<div className="screen-max-width">
 				<div className="w-full min-h-[calc(100dvh-176px)] flex flex-col py-4">
-					<div id="ai-box" className="h-full flex flex-col gap-2 min-h-[calc(100dvh-280px)] max-h-[calc(100dvh-280px)] bg-gray-800 overflow-y-auto pr-2">
+					<div ref={chatDiv} id="ai-box" className="h-full flex flex-col gap-2 min-h-[calc(100dvh-280px)] max-h-[calc(100dvh-280px)] bg-gray-800 overflow-y-auto pr-2">
 						{messages.map((message, index) => (
 							message.role === "assistant" ? (
 								<span key={index} className='text-white font-sans text-base p-4 bg-gray-900 w-fit rounded-2xl flex items-center gap-2'>

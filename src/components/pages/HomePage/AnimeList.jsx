@@ -21,7 +21,6 @@ const AnimeList = ({ animeInput }) => {
 
 	useEffect(() => {
     mutate({ animeName: debouncedAnimeInput.trim(), page });
-		window.scrollTo({ top: 0, behavior: 'smooth' })
 	}, [debouncedAnimeInput, page]);
 
 	useEffect(() => {
