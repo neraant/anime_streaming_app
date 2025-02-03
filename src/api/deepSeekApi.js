@@ -1,4 +1,4 @@
-import OpenAI from 'openai'
+import OpenAI from 'openai';
 
 const BASE_URL = import.meta.env.VITE_DEEPSEEK_BASE_URL_API
 const API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY
@@ -6,13 +6,9 @@ const AI_MODEL = import.meta.env.VITE_DEEPSEEK_MODEL
 
 const openai = new OpenAI({
 	baseURL: BASE_URL,
-	apiKey: API_KEY,
+  apiKey: API_KEY,
 	dangerouslyAllowBrowser: true,
-	defaultHeaders: {
-    'Authorization': `Bearer ${API_KEY}`,
-    'Content-Type': 'application/json',
-  },
-})
+});
 
 export const fetchAiAnswer = async (userQuestion) => {
 	try {
@@ -25,9 +21,8 @@ export const fetchAiAnswer = async (userQuestion) => {
 				}
 			]
 		})
-
 		return response
 	} catch (error) {
-		console.error(error)
+		console.error("Ошибка API:", error.response?.data || error.message);
 	}
 }

@@ -4,6 +4,14 @@ import ReactMarkdown from 'react-markdown';
 import { useMutation } from 'react-query';
 import { fetchAiAnswer } from '../api/deepSeekApi';
 import Layout from '../components/common/Layout';
+import { ALLOWED_TOPICS } from '../utils';
+
+const ALLOWED_TOPICS_LOWER = ALLOWED_TOPICS.map(topic => topic.toLowerCase());
+
+const isKeywordsIncludesWord = (message) => {
+	const lowerMessage = message.toLowerCase();
+	return ALLOWED_TOPICS_LOWER.some(topic => lowerMessage.includes(topic));
+};
 
 const AiPage = () => {
 	const [userMessage, setUserMessage] = useState("")
@@ -12,7 +20,7 @@ const AiPage = () => {
 		onSuccess: (data) => {
 			setMessages(prev => ([
 				...prev,
-				{role: "assistant", content: data?.choices[0]?.message?.content || "error"},
+				{role: "assistant", content: data?.choices[0]?.message?.content || "Извини, я сейчас не работаю, попробуй в другой раз😊"},
 			]))
 		}
 	})
@@ -21,6 +29,21 @@ const AiPage = () => {
 		e.preventDefault()
 
 		if(!message) return
+		if(!isKeywordsIncludesWord(message)) {
+			setMessages(prev => ([
+				...prev,
+				{role: "user", content: message},
+			]))
+			setUserMessage("")
+			
+			setTimeout(() => {
+				setMessages(prev => ([
+					...prev,
+					{role: "assistant", content: "Извините, я могу говорить только про Аниме!😊"},
+				]))
+			}, 2000)
+			return
+		}
 
 		mutate(message)
 
