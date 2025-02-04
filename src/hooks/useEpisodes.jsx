@@ -5,7 +5,7 @@ const useEpisodes = (anime) => {
 	const episodesListRef = useRef()
 
 	const [episodes, setEpisodes] = useState({
-		activeEpisode: "1",
+		activeEpisode: null,
 		episodesOffset: 0,
 		episodesOffsetWidth: 0,
 		totalEpisodesWidth: 0,
