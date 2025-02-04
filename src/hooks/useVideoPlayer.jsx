@@ -30,7 +30,7 @@ const useVideoPlayer = (activeEpisode) => {
     endTime: "00:00",
     isReady: false,
 		isControlVisible: true,
-		volume: localStorage.getItem('volume') || 0.6,
+		volume: localStorage.getItem('volume') || 0.8,
 		isMuted: false,
   })
 
@@ -56,7 +56,14 @@ const useVideoPlayer = (activeEpisode) => {
 				videoContainerRef.current.dataset.scrollY = window.scrollY
 			}
 			
-			screenfull.toggle(videoContainerRef.current)
+			// Разобрать!
+			if (screenfull.isEnabled && !/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+				screenfull.toggle(videoContainerRef.current);
+			} else if (video.requestFullscreen) {
+				video.requestFullscreen();
+			} else if (video.webkitEnterFullscreen) {
+				video.webkitEnterFullscreen();
+			}
 			
 			setVideoState(prev => ({
 				...prev,
@@ -83,35 +90,32 @@ const useVideoPlayer = (activeEpisode) => {
 		const video = videoRef.current.getInternalPlayer()
 		if(!video) return
 
-		setVideoState(prev => {
-			const newVolume = e.target.value
-			videoRef.current.getInternalPlayer().volume = newVolume
-			
-			localStorage.setItem('volume', newVolume)
+		const newVolume = e.target.value
+		video.volume = newVolume
+		
+		localStorage.setItem('volume', newVolume)
 
-			return {
-				...prev,
-				volume: newVolume,
-				isMuted: newVolume === 0,
-			}
-		})
+		console.log(newVolume);
+
+		setVideoState(prev => ({
+			...prev,
+			volume: newVolume,
+			isMuted: newVolume == 0,
+		}));
 	}
 
 	const handleMuted = () => {
 		setVideoState(prev => {
 			const video = videoRef?.current?.getInternalPlayer()
-			
 			if(!video) return
 
-			if(video.volume === 0) { 
-				video.volume = videoState.volume
-			} else {
-				video.volume = 0
-			}
+			const isNowMuted = !videoState.isMuted;
+
+  		video.muted = isNowMuted;
 
 			return {
 				...prev,
-				isMuted: !prev.isMuted,
+				isMuted: isNowMuted,
 			}
 		})
 	}
