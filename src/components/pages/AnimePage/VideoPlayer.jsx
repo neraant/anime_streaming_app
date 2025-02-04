@@ -45,7 +45,7 @@ const VideoPlayer = ({ anime }) => {
 					/>
 				</div>
 
-				<div className={`transition-all duration-500 ${videoState.isControlVisible && videoState.isReady || !videoState.isPlaying ? 'opacity-100' : 'opacity-0'}`}> 
+				<div className={`transition-all duration-500 ${videoState.isControlVisible && videoState.isReady ? 'opacity-100' : 'opacity-0'}`}> 
 					{/* play/pause */}
 					<div className={`absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-[#00000090] rounded-full transition-opacity duration-300`}>
 						<button 

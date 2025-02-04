@@ -55,8 +55,10 @@ const useVideoPlayer = (activeEpisode) => {
 			if(!screenfull.isFullscreen) {
 				videoContainerRef.current.dataset.scrollY = window.scrollY
 			}
+
+			const video = videoRef?.current?.getInternalPlayer()
 			
-			// Разобрать!
+			// Разобрать! - не работает и звук запоминание пересмотреть
 			if (screenfull.isEnabled && !/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
 				screenfull.toggle(videoContainerRef.current);
 			} else if (video.requestFullscreen) {
