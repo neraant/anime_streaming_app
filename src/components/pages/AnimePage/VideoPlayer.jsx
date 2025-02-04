@@ -61,7 +61,7 @@ const VideoPlayer = ({ anime }) => {
 					<div className="absolute bottom-0 left-0 w-full bg-[#18181B80] h-10 flex items-center p-2">
 						{/* play/pause */}
 						<button 
-							className='cursor-pointer mr-4'
+							className='cursor-pointer mr-2 sm:mr-4'
 							onClick={episodes.activeEpisode && togglePlay}
 						>
 							{videoState.isPlaying ? (<FaPause fontSize={18} />) : 
@@ -116,22 +116,22 @@ const VideoPlayer = ({ anime }) => {
 						</div>
 
 						{/* Quaility */}
-						<div className="relative mr-4 font-sans select-none">
+						<div className="relative mr-2 sm:mr-4 font-sans select-none">
 							<span 
-								className='cursor-pointer' 
+								className='cursor-pointer text-sm sm:text-base' 
 								onClick={() => setIsShowQuality(prev => !prev)}
 							>
 								{activeQuality}p
 							</span>
 
-							<ul className={`absolute left-[50%] translate-x-[calc(-50%)] flex flex-col bg-[#00000050] rounded-md overflow-hidden transition-all duration-300 ${isShowQuality ? "bottom-[calc(100%+18px)] opacity-100 visible" : "bottom-[calc(100%+12px)] opacity-0 invisible"}`}>
+							<ul className={`absolute left-[50%] translate-x-[calc(-50%)] flex flex-col bg-[#00000050] rounded-md overflow-hidden transition-all duration-300 ${isShowQuality ? "bottom-[calc(100%+12px)] opacity-100 visible" : "bottom-[calc(100%)] opacity-0 invisible"}`}>
 								{qualities.map(quality => (
 									<button 
 										className={`py-1 px-4 transition-all duration-300 cursor-pointer ${quality === activeQuality ? "bg-[#ffffff50]" : "hover:bg-[#ffffff20]"}`}
 										onClick={() => handleVideoQuality(quality)}
 										key={quality}
 									>
-										<li className="text-center font-sans">
+										<li className="text-sm sm:text-base text-center font-sans">
 											{quality}p
 										</li>
 									</button>

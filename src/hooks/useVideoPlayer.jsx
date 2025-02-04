@@ -232,6 +232,60 @@ const useVideoPlayer = (activeEpisode) => {
 		}
 	}, [])
 
+		// Exit fullscreen on "escape"
+	useEffect(() => {
+		const handleExitFullscreen = (e) => {
+			if (e.key === "Escape") {
+				setVideoState(prev => ({
+					...prev,
+					isFullscreen: false,
+				}));
+			}
+		};
+
+		document.addEventListener("keydown", handleExitFullscreen);
+
+		return () => {
+			document.removeEventListener("keydown", handleExitFullscreen);
+		};
+	}, []);
+
+	// Exit fullscreen on iphone
+	useEffect(() => {
+		const handleFullscreenChange  = (e) => {
+			setVideoState(prev => ({
+				...prev,
+				isFullscreen: screenfull.isFullscreen,
+			}))
+		}
+
+		if(screenfull.isEnabled) {
+			screenfull.on("change", handleFullscreenChange)
+		}
+
+		return () => {
+			if(screenfull.isEnabled) {
+				screenfull.off("change", handleFullscreenChange)
+			}
+		}
+	}, [])
+
+	// Lookinh for video pausing
+	useEffect(() => {
+		const video = videoRef?.current?.getInternalPlayer()
+		if(!video) return
+
+		const handlePause = () => {
+			setVideoState(prev => ({
+				...prev,
+				isPlaying: false,
+			}))
+		}
+
+		video.addEventListener("pause", handlePause)
+		return () => video.removeEventListener("pause", handlePause)
+	}, [])
+
 	return { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible }
 }
 
