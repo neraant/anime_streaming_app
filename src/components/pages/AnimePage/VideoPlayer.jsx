@@ -1,12 +1,15 @@
-import { FaChevronLeft, FaChevronRight, FaCompress, FaExpand, FaPause, FaPlay } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaCompress, FaExpand, FaPause, FaPlay, FaVolumeDown, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import useEpisodes from '../../../hooks/useEpisodes';
 import useVideoPlayer from '../../../hooks/useVideoPlayer';
+import useVideoQuality from '../../../hooks/useVideoQuality';
 
 const VideoPlayer = ({ anime }) => {
 	const { episodesContainerRef, episodesListRef, episodes, handleEpisodes } = useEpisodes(anime)
 
-	const { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady } = useVideoPlayer(episodes.activeEpisode)
+	const { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible } = useVideoPlayer(episodes.activeEpisode)
+
+	const { qualities, activeQuality, setActiveQuality, isShowQuality, setIsShowQuality, handleVideoQuality, REVERSE_QUALITY_MAP } = useVideoQuality(anime, episodes, videoRef)
 
 	const showPreview = () => {
 		if(videoRef.current && !videoState.isPlaying) {
@@ -36,19 +39,18 @@ const VideoPlayer = ({ anime }) => {
 						playsinline 
 						onReady={handleReady}
 						playing={videoState.isPlaying}
-						url={`https://cache.libria.fun/${anime.player.list[episodes.activeEpisode]?.hls?.fhd || ""}`}
+						url={`https://cache.libria.fun/${anime.player.list[episodes.activeEpisode]?.hls[REVERSE_QUALITY_MAP[activeQuality]] || ""}`}
 						light={"/images/watch_bg.png"}
 						className="absolute top-0 left-0"
 					/>
 				</div>
 
-				<div className={`transition-all duration-500 ${videoState.isControlVisible ? 'opacity-100' : 'opacity-0'}`}>
+				<div className={`transition-all duration-500 ${videoState.isControlVisible && videoState.isReady ? 'opacity-100' : 'opacity-0'}`}> 
 					{/* play/pause */}
 					<div className={`absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-[#00000090] rounded-full transition-opacity duration-300`}>
 						<button 
 							className='cursor-pointer flex-center p-5'
 							onClick={episodes.activeEpisode && togglePlay}
-							disabled={!episodes.activeEpisode && false}
 						>
 							{videoState.isPlaying ? (<FaPause fontSize={26} />) : 
 								(<FaPlay fontSize={26} />)}
@@ -61,13 +63,12 @@ const VideoPlayer = ({ anime }) => {
 						<button 
 							className='cursor-pointer mr-4'
 							onClick={episodes.activeEpisode && togglePlay}
-							disabled={!episodes.activeEpisode && false}
 						>
 							{videoState.isPlaying ? (<FaPause fontSize={18} />) : 
 								(<FaPlay fontSize={18} />)}
 						</button>
 
-						{/* video progress */}
+						{/* video progress (time) */}
 						<div className="flex items-center mr-2 relative bottom-[-1px]">
 							<span className='text-white text-xs min-w-9'>{videoState.currentTime}</span>
 							<span>/</span>
@@ -82,12 +83,65 @@ const VideoPlayer = ({ anime }) => {
 							step={0.01}
 							value={videoState?.progress || 0}
 							onChange={handleSeek}
-							className='h-full relative z-10 cursor-pointer w-full'
-						/>
+							className='video-progress h-full relative z-10 cursor-pointer w-full mr-2'
+							style={{ "--progress": `${videoState.progress}%`, }}
+						>
+						</input>
+
+						{/* volume */}
+						<div className="relative flex-center mr-2">
+							<button 
+								className="flex cursor-pointer"
+								onMouseEnter={showVolume}
+								onMouseLeave={hideVolume}
+								onClick={handleMuted}
+							>
+								{videoState.isMuted ? 
+									<FaVolumeMute /> : videoState.volume > 0.7 ?
+									<FaVolumeUp /> : 
+									<FaVolumeDown />
+								}
+							</button>
+
+							<input 
+								type='range'
+								min='0'
+								max='1'
+								step={0.05}
+								value={videoState?.volume || 0}
+								onChange={handleVolumeChange}
+								className={`video-volume absolute left-[50%] top-[-55px] translate-x-[-50%] cursor-pointer rotate-[-90deg] transition-all duration-300 ${isVolumeVisible ? "opacity-100" : "opacity-0"}`}
+								style={{ "--volume": `${videoState.volume * 100}%`, }}
+							/>
+						</div>
+
+						{/* Quaility */}
+						<div className="relative mr-4 font-sans select-none">
+							<span 
+								className='cursor-pointer' 
+								onClick={() => setIsShowQuality(prev => !prev)}
+							>
+								{activeQuality}p
+							</span>
+
+							<ul className={`absolute left-[50%] translate-x-[calc(-50%)] flex flex-col bg-[#00000050] rounded-md overflow-hidden transition-all duration-300 ${isShowQuality ? "bottom-[calc(100%+18px)] opacity-100 visible" : "bottom-[calc(100%+12px)] opacity-0 invisible"}`}>
+								{qualities.map(quality => (
+									<button 
+										className={`py-1 px-4 transition-all duration-300 cursor-pointer ${quality === activeQuality ? "bg-[#ffffff50]" : "hover:bg-[#ffffff20]"}`}
+										onClick={() => handleVideoQuality(quality)}
+										key={quality}
+									>
+										<li className="text-center font-sans">
+											{quality}p
+										</li>
+									</button>
+								))}
+							</ul>
+						</div>
 
 						{/* fullscreen */}
 						<button 
-							className='cursor-pointer ml-4'
+							className='cursor-pointer'
 							onClick={toggleFullscreen}
 						>
 							{!videoState.isFullscreen ? (<FaExpand />) : (<FaCompress />)}

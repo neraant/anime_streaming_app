@@ -19,6 +19,9 @@ const useVideoPlayer = (activeEpisode) => {
 	const hideControlsRef = useRef(null)
 	const videoContainerRef = useRef(null)
 	
+	const [isVolumeVisible, setIsVolumeVisible] = useState(false)
+	let hideTimeout;
+
 	const [videoState, setVideoState] = useState({
     isPlaying: false,
     isFullscreen: false,
@@ -27,45 +30,9 @@ const useVideoPlayer = (activeEpisode) => {
     endTime: "00:00",
     isReady: false,
 		isControlVisible: true,
+		volume: localStorage.getItem('volume') || 0.6,
+		isMuted: false,
   })
-
-	useEffect(() => {
-		const video = videoRef.current?.getInternalPlayer()
-		if(!video) return
-
-		const updateProgress = () => {
-			setVideoState(prev => ({
-				...prev,
-				progress: (video.currentTime / video.duration) * 100,
-				currentTime: formatTime(video.currentTime || 0),
-				endTime: formatTime(video.duration || 0),
-			}))
-		}
-
-		if(videoState.isPlaying) {
-			intervalRef.current = setInterval(() => {
-				updateProgress()
-			}, 1000)
-		} else {
-			clearInterval(intervalRef.current)
-		}
-
-		return () => clearInterval(intervalRef.current)
-	}, [videoState.isPlaying])
-
-	useEffect(() => {
-		const video = videoRef.current?.getInternalPlayer()
-
-		if(!video) return
-		
-		setVideoState(prev => ({
-			...prev,
-			progress: 0,
-			currentTime: "00:00",
-			isPlaying: false,
-			isReady: false,
-		}))
-	}, [activeEpisode])
 
 	const togglePlay = () => {
 		const video = videoRef.current?.getInternalPlayer();
@@ -85,7 +52,12 @@ const useVideoPlayer = (activeEpisode) => {
 
 	const toggleFullscreen = () => {
 		if(screenfull.isEnabled && videoState.isReady) {
-			screenfull.toggle(videoRef.current.getInternalPlayer())
+			if(!screenfull.isFullscreen) {
+				videoContainerRef.current.dataset.scrollY = window.scrollY
+			}
+			
+			screenfull.toggle(videoContainerRef.current)
+			
 			setVideoState(prev => ({
 				...prev,
 				isFullscreen: !prev.isFullscreen,
@@ -105,6 +77,54 @@ const useVideoPlayer = (activeEpisode) => {
 			progress: e.target.value,
 			current: formatTime(seekTo)
 		}))
+	}
+
+	const handleVolumeChange = (e) => {
+		const video = videoRef.current.getInternalPlayer()
+		if(!video) return
+
+		setVideoState(prev => {
+			const newVolume = e.target.value
+			videoRef.current.getInternalPlayer().volume = newVolume
+			
+			localStorage.setItem('volume', newVolume)
+
+			return {
+				...prev,
+				volume: newVolume,
+				isMuted: newVolume === 0,
+			}
+		})
+	}
+
+	const handleMuted = () => {
+		setVideoState(prev => {
+			const video = videoRef?.current?.getInternalPlayer()
+			
+			if(!video) return
+
+			if(video.volume === 0) { 
+				video.volume = videoState.volume
+			} else {
+				video.volume = 0
+			}
+
+			return {
+				...prev,
+				isMuted: !prev.isMuted,
+			}
+		})
+	}
+
+	const showVolume = () => {
+		clearTimeout(hideTimeout)
+		setIsVolumeVisible(true)
+	}
+
+	const hideVolume = () => {
+		hideTimeout = setTimeout(() => {
+			setIsVolumeVisible(false)
+		}, 2000)
 	}
 
 	const handleReady = () => {
@@ -135,6 +155,62 @@ const useVideoPlayer = (activeEpisode) => {
 		})
 	}
 
+	// Scroll when fullscreen off
+	useEffect(() => {
+		if (screenfull.isEnabled) {
+			const handleFullscreenChange = () => {
+				if(!screenfull.isFullscreen) {
+					const savedScrollY = videoContainerRef.current.dataset.scrollY 
+					window.scrollTo({ top: savedScrollY, behavior: "instant" })
+				}
+			}
+
+			screenfull.on("change", handleFullscreenChange)
+			return () => screenfull.off("change", handleFullscreenChange)
+		}
+	}, []);
+
+	// Update progress
+	useEffect(() => {
+		const video = videoRef.current?.getInternalPlayer()
+		if(!video) return
+
+		const updateProgress = () => {
+			setVideoState(prev => ({
+				...prev,
+				progress: (video.currentTime / video.duration) * 100,
+				currentTime: formatTime(video.currentTime || 0),
+				endTime: formatTime(video.duration || 0),
+			}))
+		}
+
+		if(videoState.isPlaying) {
+			intervalRef.current = setInterval(() => {
+				updateProgress()
+			}, 1000)
+		} else {
+			clearInterval(intervalRef.current)
+		}
+
+		return () => clearInterval(intervalRef.current)
+	}, [videoState.isPlaying])
+
+	// Set options when change episode
+	useEffect(() => {
+		const video = videoRef.current?.getInternalPlayer()
+
+		if(!video) return
+
+		setVideoState(prev => ({
+			...prev,
+			progress: 0,
+			currentTime: "00:00",
+			isPlaying: true,
+			isReady: false,
+		}))
+	}, [activeEpisode])
+
+	// Controll video controls (hidding)
 	useEffect(() => {
 		const videoContainer = videoContainerRef.current
 		if(!videoContainer) return
@@ -150,7 +226,7 @@ const useVideoPlayer = (activeEpisode) => {
 		}
 	}, [])
 
-	return { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady }
+	return { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible }
 }
 
 export default useVideoPlayer
