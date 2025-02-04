@@ -51,14 +51,14 @@ const useVideoPlayer = (activeEpisode) => {
 	};
 
 	const toggleFullscreen = () => {
-		if(screenfull.isEnabled && videoState.isReady) {
+		if(videoState.isReady) {
 			if(!screenfull.isFullscreen) {
 				videoContainerRef.current.dataset.scrollY = window.scrollY
 			}
 
 			const video = videoRef?.current?.getInternalPlayer()
+			if(!video) return
 			
-			// Разобрать! - не работает и звук запоминание пересмотреть
 			if (screenfull.isEnabled && !/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
 				screenfull.toggle(videoContainerRef.current);
 			} else if (video.requestFullscreen) {
