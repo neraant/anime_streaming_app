@@ -253,7 +253,6 @@ const useVideoPlayer = (activeEpisode) => {
 			setVideoState(prev => ({
 				...prev,
 				isFullscreen: screenfull.isFullscreen,
-				isPlaying: !!document.fullscreenElement,
 			}));
 		};
 	
