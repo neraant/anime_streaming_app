@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-const useEpisodes = (anime) => {
+const useEpisodes = (anime, handleEpisodeChange) => {
 	const episodesContainerRef = useRef()
 	const episodesListRef = useRef()
 
@@ -32,7 +32,10 @@ const useEpisodes = (anime) => {
 					break;
 				}
 				case "change": {
-					return { ...prev, activeEpisode: key };
+					return { 
+						...prev, 
+						activeEpisode: key 
+					};
 				}
 				default:
 					break;
@@ -40,6 +43,10 @@ const useEpisodes = (anime) => {
 
 			return { ...prev, episodesOffset: newOffset };
 		})
+
+		if(type === "change" && key !== null) {
+			handleEpisodeChange(anime.episodes[key])
+		}
 	}
 
 	// Calc scroll offset

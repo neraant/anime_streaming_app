@@ -3,40 +3,34 @@ import axios from 'axios';
 const BASE_URL = import.meta.env.VITE_ANILIBRIA_BASE_API_URL
 
 export const fetchAllAnimeData = async ({animeName = '', page = 1}) => {
-	let url = `${BASE_URL}/title/updates`
+	let url = `${BASE_URL}/anime/catalog/releases`
 	
 	const params = {
-		limit: 20,
-		filter: 'id,names,genres,posters,season',
 		page,
-		items_per_page: 20,
+		limit: 20,
+		filter: 'id,name,genres,poster,year',
 	}
 
 	if(animeName) {
-		url = `${BASE_URL}/title/search`;
-		params.search = animeName;
+		url = `${BASE_URL}/app/search/releases`;
+		params.query = animeName;
+		params.include = "meta";
 	}
 
 	try {
 		const { data } = await axios.get(url, { 
-			params, 
-			headers: {
-				// 'Accept-Encoding': 'gzip, deflate, br',
-			} 
+			params,
 		})
 		return data
 	} catch (error) {
-		console.error(error.message)
+		console.error('Error message:', error.message);
+  	console.error('Error response:', error.response ? error.response.data : 'No response');
 	}
 }
 
 export const fetchAnimeData = async (animeId) => {
 	try {
-		const { data } = await axios.get(`${BASE_URL}/title?id=${animeId}`, {
-			params: {
-				filter: 'id,names,genres,posters,type,status,player,description,season'
-			}
-		})
+		const { data } = await axios.get(`${BASE_URL}/anime/releases/${animeId}`)
 		return data
 	} catch (error) {
 		console.error(error.message)

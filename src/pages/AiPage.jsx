@@ -77,7 +77,7 @@ const AiPage = () => {
 					<div ref={chatDiv} id="ai-box" className="h-full flex flex-col gap-2 min-h-[calc(100dvh-280px)] max-h-[calc(100dvh-280px)] bg-gray-800 overflow-y-auto pr-2">
 						{messages.map((message, index) => (
 							message.role === "assistant" ? (
-								<span key={index} className='text-white font-sans text-base p-4 bg-gray-900 w-fit rounded-2xl flex items-center gap-2'>
+								<span key={index} className='text-white  text-base p-4 bg-gray-900 w-fit rounded-2xl flex items-center gap-2'>
 									<div className="p-2 bg-gray-600 rounded-full mb-auto">
 										<FaBrain fontSize={12} />
 									</div>
@@ -90,7 +90,7 @@ const AiPage = () => {
 										</span>
 								</span>
 							) : (
-								<span key={index} className='text-white font-sans text-base p-4 bg-gray-900 w-fit rounded-2xl flex items-center gap-2 ml-auto'>
+								<span key={index} className='text-white  text-base p-4 bg-gray-900 w-fit rounded-2xl flex items-center gap-2 ml-auto'>
 									{message.content}
 									<div className="p-2 bg-gray-600 rounded-full mb-auto">
 										<FaUser fontSize={12} />
@@ -106,7 +106,7 @@ const AiPage = () => {
 					>
 						<textarea 
 							type="text" 
-							className='w-full pr-2 text-white placeholder:text-gray-700 text-base outline-none border-none font-sans resize-none field-sizing-content max-w-[calc(100%-32px)] max-h-[100px] overflow-y-auto' 
+							className='w-full pr-2 text-white placeholder:text-gray-700 text-base outline-none border-none  resize-none field-sizing-content max-w-[calc(100%-32px)] max-h-[100px] overflow-y-auto' 
 							placeholder='Привет! Что хочешь спросить?'
 							value={userMessage}
 							onChange={(e) => setUserMessage(e.target.value)}

@@ -78,7 +78,7 @@ const WelcomePage = () => {
 			</div>
 			
 			<div className="screen-max-width flex flex-col items-center div-anim opacity-0 translate-y-[20px]">
-				<h1 className='font-axiformaBold text-3xl text-center text-white mb-5 mt-5'>
+				<h1 className=' text-3xl text-center text-white mb-5 mt-5'>
 					Регистрация
 				</h1>
 
@@ -88,7 +88,7 @@ const WelcomePage = () => {
 
 				<button
 					onClick={handleButtonClick} 
-					className="font-axiformaBold text-center text-base text-white p-[2px] gradient-border w-full h-full rounded-full cursor-pointer relative"
+					className=" text-center text-base text-white p-[2px] gradient-border w-full h-full rounded-full cursor-pointer relative"
 				>
 					<div className="absolute top-[15px] left-[-20px] bg-[#19A1BE] h-[86px] w-[60%] rounded-full opacity-40 blur-2xl pointer-events-none left-shadow" />
 					

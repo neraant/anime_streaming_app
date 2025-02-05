@@ -4,13 +4,16 @@ import { BounceLoader } from 'react-spinners';
 import useEpisodes from '../../../hooks/useEpisodes';
 import useVideoPlayer from '../../../hooks/useVideoPlayer';
 import useVideoQuality from '../../../hooks/useVideoQuality';
+import useVideoVolume from '../../../hooks/useVideoVolume';
 
-const VideoPlayer = ({ anime }) => {
-	const { episodesContainerRef, episodesListRef, episodes, handleEpisodes } = useEpisodes(anime)
+const VideoPlayer = ({ anime, handleEpisodeChange, episodeInfo: {episodeInfo} }) => {
+	const { episodesContainerRef, episodesListRef, episodes, handleEpisodes } = useEpisodes(anime, handleEpisodeChange)
 
-	const { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible, handleBuffer, handleBufferEnd } = useVideoPlayer(episodes.activeEpisode)
+	const { videoRef, videoContainerRef, videoState, setVideoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleBuffer, handleBufferEnd, resetTimer } = useVideoPlayer(episodes.activeEpisode)
 
-	const { qualities, activeQuality, isShowQuality, setIsShowQuality, handleVideoQuality, REVERSE_QUALITY_MAP } = useVideoQuality(anime, episodes, videoRef)
+	const { qualities, activeQuality, isShowQuality, setIsShowQuality, handleVideoQuality, videoUrl } = useVideoQuality(anime, episodes, videoRef)
+
+	const { handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible } = useVideoVolume(videoRef, setVideoState, videoState)
 
 	const showPreview = () => {
 		if(videoRef.current && !videoState.isPlaying) {
@@ -20,7 +23,7 @@ const VideoPlayer = ({ anime }) => {
 
 	return (
 		<section className='text-white mt-5'>
-			<h3 className='font-axiformaBold text-2xl mb-2'>
+			<h3 className='font-semibold text-2xl mb-2'>
 				Смотреть <span className='text-purple-500'>онлайн</span>
 			</h3>
 
@@ -31,6 +34,8 @@ const VideoPlayer = ({ anime }) => {
 				<div 
 					className="relative w-full overflow-hidden rounded-md bg-black" style={{ aspectRatio: "16/9" }}
 					onClick={(!episodes.activeEpisode && !videoState.isPlaying) ? showPreview : togglePlay}
+					onMouseMove={videoState.isPlaying ? resetTimer : null}
+					onTouchStart={resetTimer}
 				>
 					{videoState.isBuffering && (
 						<div className='absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]'>
@@ -50,7 +55,7 @@ const VideoPlayer = ({ anime }) => {
 						onBufferEnd={handleBufferEnd}
 
 						playing={videoState.isPlaying}
-						url={`https://cache.libria.fun/${anime.player.list[episodes.activeEpisode]?.hls[REVERSE_QUALITY_MAP[activeQuality]] || ""}`}
+						url={videoUrl}
 						light={"/images/watch_bg.png"}
 						className="absolute top-0 left-0"
 					/>
@@ -80,10 +85,10 @@ const VideoPlayer = ({ anime }) => {
 						</button>
 
 						{/* video progress (time) */}
-						<div className="flex items-center mr-2 relative bottom-[-1px]">
+						<div className="flex items-center gap-[2px] mr-2 relative">
 							<span className='text-white text-xs min-w-9'>{videoState.currentTime}</span>
 							<span>/</span>
-							<span className='text-white text-xs min-w-9'>{videoState.endTime}</span>
+							<span className='text-white text-xs min-w-9'> {videoState.endTime}</span>
 						</div>
 
 						{/* progress bar */}
@@ -127,23 +132,23 @@ const VideoPlayer = ({ anime }) => {
 						</div>
 
 						{/* Quaility */}
-						<div className="relative mr-2 sm:mr-4 font-sans select-none">
+						<div className="relative mr-2 sm:mr-4  select-none">
 							<span 
 								className='cursor-pointer text-sm sm:text-base' 
 								onClick={() => setIsShowQuality(prev => !prev)}
 							>
-								{activeQuality}p
+								{activeQuality}
 							</span>
 
 							<ul className={`absolute left-[50%] translate-x-[calc(-50%)] flex flex-col bg-[#00000050] rounded-md overflow-hidden transition-all duration-300 ${isShowQuality ? "bottom-[calc(100%+12px)] opacity-100 visible" : "bottom-[calc(100%)] opacity-0 invisible"}`}>
 								{qualities.map(quality => (
 									<button 
-										className={`py-1 px-4 transition-all duration-300 cursor-pointer ${quality === activeQuality ? "bg-[#ffffff50]" : "hover:bg-[#ffffff20]"}`}
-										onClick={() => handleVideoQuality(quality)}
-										key={quality}
+										className={`py-1 px-4 transition-all duration-300 cursor-pointer ${quality.quality === activeQuality ? "bg-[#ffffff50]" : "hover:bg-[#ffffff20]"}`}
+										onClick={() => handleVideoQuality(quality.quality)}
+										key={quality.text}
 									>
-										<li className="text-sm sm:text-base text-center font-sans">
-											{quality}p
+										<li className="text-sm sm:text-base text-center ">
+											{quality.text}
 										</li>
 									</button>
 								))}
@@ -163,7 +168,7 @@ const VideoPlayer = ({ anime }) => {
 
 			{/* Episodes line */}
 			<div 
-				className="my-2 w-full bg-gray-900 rounded-md flex relative overflow-hidden"
+				className={`mt-2 w-full bg-gray-900 rounded-md flex relative overflow-hidden transition-all duration-300 ${episodeInfo.name || episodeInfo.date && "rounded-bl-md rounded-br-md none"}`}
 			>
 				<button 
 					className='absolute z-5 left-2 top-[50%] translate-y-[-50%] cursor-pointer'
@@ -182,13 +187,16 @@ const VideoPlayer = ({ anime }) => {
 						style={{transform: `translate(${-episodes.episodesOffset * 100}%)`}}
 						ref={episodesListRef}
 					>
-						{Object.keys(anime.player.list).map((key, index) => (
-							<li key={index} className='flex-center' >
+						{Object.keys(anime.episodes).map((key, index) => (
+							<li 
+								key={index} 
+								className='flex-center' 
+							>
 								<button 
 									className={`cursor-pointer py-1 px-3 rounded-md outline-1 outline-transparent hover:outline-1 hover:underline hover:outline-purple-500 transition-all duration-300 ${episodes.activeEpisode === key ? 'bg-purple-700' : ''}`}
 									onClick={() => handleEpisodes("change", key)}
 								>
-									{key}
+									{Number(key) + 1}
 								</button>
 							</li>
 						))}

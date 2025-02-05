@@ -34,15 +34,15 @@ const Header = () => {
 						</a>
 
 						<div>
-							<p className='text-white text-base'>Добро пожаловать!</p>
+							<p className='text-white font-semibold text-base'>Добро пожаловать!</p>
 
-							<span className='text-white text-lg font-axiformaBold'>Гость</span>
+							<span className='text-white text-lg '>Гость</span>
 						</div>
 					</div>
 
 					{windowSize && (
 						<a href="/anime">
-							<h1 className='text-white font-axiforma text-5xl'>
+							<h1 className='text-white font-semibold text-5xl'>
 								AniAnt
 							</h1>
 						</a>

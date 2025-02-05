@@ -18,9 +18,6 @@ const useVideoPlayer = (activeEpisode) => {
 	const intervalRef = useRef(null)
 	const hideControlsRef = useRef(null)
 	const videoContainerRef = useRef(null)
-	
-	const [isVolumeVisible, setIsVolumeVisible] = useState(false)
-	let hideTimeout;
 
 	const [videoState, setVideoState] = useState({
     isPlaying: false,
@@ -53,16 +50,23 @@ const useVideoPlayer = (activeEpisode) => {
 		const video = videoRef.current?.getInternalPlayer();
 		if (!video || !videoState.isReady) return;
 
-		setVideoState((prev) => ({
-			...prev,
-			isPlaying: !prev.isPlaying,
-		}));
+		
+		setVideoState((prev) => {
+			const newPlayingState = !prev.isPlaying
+			newPlayingState ? video.play() : video.pause()
+			
+			if(newPlayingState) {
+				resetTimer()
+			} else {
+				clearTimeout(hideControlsRef.current)
+				setVideoState(prev => ({ ...prev, isControlVisible: true }));
+			}
 
-		if (!videoState.isPlaying) {
-			video.play();
-		} else {
-			video.pause();
-		}
+			return  {
+				...prev,
+				isPlaying: newPlayingState,
+			}
+		});
 	};
 
 	const toggleFullscreen = () => {
@@ -99,53 +103,8 @@ const useVideoPlayer = (activeEpisode) => {
 		setVideoState(prev => ({
 			...prev,
 			progress: e.target.value,
-			current: formatTime(seekTo)
+			currentTime: formatTime(seekTo)
 		}))
-	}
-
-	const handleVolumeChange = (e) => {
-		const video = videoRef.current.getInternalPlayer()
-		if(!video) return
-
-		const newVolume = e.target.value
-		video.volume = newVolume
-		
-		localStorage.setItem('volume', newVolume)
-
-		console.log(newVolume);
-
-		setVideoState(prev => ({
-			...prev,
-			volume: newVolume,
-			isMuted: newVolume == 0,
-		}));
-	}
-
-	const handleMuted = () => {
-		setVideoState(prev => {
-			const video = videoRef?.current?.getInternalPlayer()
-			if(!video) return
-
-			const isNowMuted = !videoState.isMuted;
-
-  		video.muted = isNowMuted;
-
-			return {
-				...prev,
-				isMuted: isNowMuted,
-			}
-		})
-	}
-
-	const showVolume = () => {
-		clearTimeout(hideTimeout)
-		setIsVolumeVisible(true)
-	}
-
-	const hideVolume = () => {
-		hideTimeout = setTimeout(() => {
-			setIsVolumeVisible(false)
-		}, 2000)
 	}
 
 	const handleReady = () => {
@@ -156,25 +115,31 @@ const useVideoPlayer = (activeEpisode) => {
 		}))
 	}
 
-	const resetHideControlsTimer = () => {
-		clearTimeout(hideControlsRef.current)
+	const resetTimer = () => {
 		setVideoState(prev => ({
 			...prev,
 			isControlVisible: true,
-		}))
+		}));
+	
+		if (hideControlsRef.current) {
+			clearTimeout(hideControlsRef.current);
+		}
+	
+		if (videoRef.current?.getInternalPlayer()?.paused === false) {
+			hideControlsRef.current = setTimeout(() => {
+				setVideoState(prev => ({
+					...prev,
+					isControlVisible: false,
+				}));
+			}, 3000);
+		}
+	};
 
-		setVideoState(prev => {
-			if(prev.isPlaying) { 
-				hideControlsRef.current = setTimeout(() => {
-					setVideoState(prev => ({
-						...prev,
-						isControlVisible: false,
-					}))
-				}, 3000)
-			}
-			return { ...prev, isControlVisible: true };
-		})
-	}
+	// Controll video controls
+	useEffect(() => {
+		resetTimer()
+		return () => clearTimeout(hideControlsRef.current)
+	}, [])
 
 	// Scroll when fullscreen off
 	useEffect(() => {
@@ -213,7 +178,10 @@ const useVideoPlayer = (activeEpisode) => {
 			clearInterval(intervalRef.current)
 		}
 
-		return () => clearInterval(intervalRef.current)
+		return () => {
+			clearInterval(intervalRef.current)
+			intervalRef.current = null
+		}
 	}, [videoState.isPlaying])
 
 	// Set options when change episode
@@ -231,23 +199,7 @@ const useVideoPlayer = (activeEpisode) => {
 		}))
 	}, [activeEpisode])
 
-	// Controll video controls (hidding)
-	useEffect(() => {
-		const videoContainer = videoContainerRef.current
-		if(!videoContainer) return
-
-		const showControls = () => resetHideControlsTimer()
-
-		videoContainer.addEventListener('mousemove', showControls)
-		videoContainer.addEventListener('keydown', showControls)
-
-		return () => {
-			videoContainer.removeEventListener('mousemove', showControls)
-			videoContainer.removeEventListener('keydown', showControls)
-		}
-	}, [])
-
-	// Exit and pause video on "Escape"
+	// Exit video on "Escape"
 	useEffect(() => {
 		const handleFullscreenChange = () => {
 			setVideoState(prev => ({
@@ -267,27 +219,7 @@ const useVideoPlayer = (activeEpisode) => {
 		};
 	}, []);
 
-	// Exit and pause video on mobile
-	useEffect(() => {
-		const video = videoRef?.current?.getInternalPlayer();
-		if (!video) return;
-	
-		const handleExitFullscreen = () => {
-			setVideoState(prev => ({
-				...prev,
-				isFullscreen: false,
-				isPlaying: false,
-			}));
-		};
-	
-		video.addEventListener("webkitendfullscreen", handleExitFullscreen);
-	
-		return () => {
-			video.removeEventListener("webkitendfullscreen", handleExitFullscreen);
-		};
-	}, []);
-
-	return { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible, handleBuffer, handleBufferEnd }
+	return { videoRef, videoContainerRef, videoState, setVideoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleBuffer, handleBufferEnd, resetTimer }
 }
 
 export default useVideoPlayer

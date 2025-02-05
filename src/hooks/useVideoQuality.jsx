@@ -15,9 +15,10 @@ const REVERSE_QUALITY_MAP = {
 const useVideoQuality = (anime, episodes, videoRef) => {
 	const [qualities, setQualities] = useState([])
 	const [activeQuality, setActiveQuality] = useState(() => {
-		return localStorage.getItem("quality") || qualities.find(q => q) || 360;
+		return localStorage.getItem("quality") || 480;
 	});
 	const [isShowQuality, setIsShowQuality] = useState(false)
+	const [videoUrl, setVideoUrl] = useState('')
 
 	// Choose quality
 	const handleVideoQuality = (quality) => {
@@ -42,13 +43,45 @@ const useVideoQuality = (anime, episodes, videoRef) => {
 
 	// Getting all possible qualities
 	useEffect(() => {
-		console.log(anime);
-		const videoQualities = Object.keys(anime?.player?.list[episodes?.activeEpisode || 1]?.hls).map(quality => QUALITY_MAP[quality])
+		const videoQualities = []
+		const episode = anime.episodes[Number(episodes.activeEpisode)]
+		
+		if (episode?.hls_1080) {
+			videoQualities.push({
+				quality: 1080, 
+				videoUrl: episode.hls_1080, 
+				text: "1080p"
+			});
+		}
+		if (episode?.hls_720) {
+			videoQualities.push({
+				quality: 720, 
+				videoUrl: episode.hls_720, 
+				text: "720p"
+			});
+		}
+		if (episode?.hls_480) {
+			videoQualities.push({
+				quality: 480, 
+				videoUrl: episode.hls_480, 
+				text: "480p"
+			});
+		}
 
 		setQualities(videoQualities)
 	}, [episodes?.activeEpisode])
+
+	// Getting video url
+	useEffect(() => {
+    const selectedQuality = qualities.find(q => q.quality === Number(activeQuality));
+
+    if (selectedQuality) {
+      setVideoUrl(selectedQuality.videoUrl);
+      localStorage.setItem("quality", activeQuality);
+    }
+  }, [activeQuality, qualities]);
 	
-	return { qualities, activeQuality, setActiveQuality, isShowQuality, setIsShowQuality, handleVideoQuality, REVERSE_QUALITY_MAP }
+	return { qualities, activeQuality, setActiveQuality, isShowQuality, setIsShowQuality, handleVideoQuality, videoUrl }
 }
 
 export default useVideoQuality

@@ -1,24 +1,62 @@
+import { useCallback, useReducer } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useQuery } from 'react-query';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchAnimeData } from '../api/anilibriaApi';
 import Layout from '../components/common/Layout';
 import AnimeDetails from '../components/pages/AnimePage/AnimeDetails';
+import EpisodeDetails from '../components/pages/AnimePage/EpisodeDetails';
 import VideoPlayer from '../components/pages/AnimePage/VideoPlayer';
 
 const useQueryParams = () => {
 	return new URLSearchParams(useLocation().search)
 }
 
+const episodeReducer = (state, action) => {
+	switch(action.type) {
+		case "change": 
+			return {
+				...state,
+				episodeInfo: {
+					name: action.payload.name,
+					date: action.payload.date,
+				}
+			}
+		default:
+			return state;
+	}
+}
+
 const AnimePage = () => {
 	const query = useQueryParams()
 	const animeId = query.get("id")
+
+	const navigate = useNavigate()
+
+	// Store episode data (name, date etc.)
+	const initialState = {
+		episodeInfo: {
+			name: "",
+			date: "",
+		}
+	}
+	const [state, dispatch] = useReducer(episodeReducer, initialState)
 
 	const { data, isLoading, isError, error } = useQuery(
 		["anime", animeId], 
 		() => fetchAnimeData(animeId),
 		{ enabled: !!animeId, retry: 3, retryDelay: 5000, refetchOnWindowFocus: false }
 	)
+
+	const handleEpisodeChange = useCallback((episode) => {
+		dispatch({
+			type: "change",
+			payload: {
+				name: episode?.name || null,
+				date: episode?.updated_at || null,
+			}
+		})
+	}, [dispatch])
 
 	if(isLoading) {
 		return (
@@ -78,7 +116,7 @@ const AnimePage = () => {
 
 						<button 
 							className='w-fit py-2 px-3 bg-purple-500 rounded-md text-white text-base cursor-pointer flex gap-2 items-center  transition-all duration-300 hover:bg-purple-400'
-							onClick={() => history.back()}
+							onClick={() => navigate(-1)}
 						>
 						<FaArrowLeft fontSize={16} className='relative bottom-[1px]' /> 
 						Вернуться назад
@@ -94,7 +132,12 @@ const AnimePage = () => {
 			<Layout>
 				<div className="screen-max-width">
 					<AnimeDetails anime={data} />
-					<VideoPlayer anime={data} />
+					<VideoPlayer 
+						episodeInfo={state} 
+						handleEpisodeChange={handleEpisodeChange} 
+						anime={data} 
+					/>
+					<EpisodeDetails episodeInfo={state} />
 				</div>
 			</Layout>
 		</>

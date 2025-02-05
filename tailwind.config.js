@@ -5,10 +5,6 @@ module.exports = {
   ],
 	theme: {
     extend: {
-      fontFamily: {
-        axiforma: ['axiforma-regular', 'sans-serif'],
-        axiformaBold: ['axiforma-bold', 'sans-serif'],
-      },
       colors: {
         gray: {
 					300: '#E8E8E8',

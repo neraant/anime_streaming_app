@@ -9,7 +9,7 @@ const Sidebar = () => {
 			<div className='absolute left-0 top-0 w-full z-50 bg-gray-900 h-[100dvh] shadow-inner py-8'>
 				<div className="flex items-center justify-between mb-8 px-8">
 					<a href="/anime">
-						<h1 className='text-white font-axiforma text-5xl'>
+						<h1 className='text-white  text-5xl'>
 							AniAnt
 						</h1>
 					</a>
