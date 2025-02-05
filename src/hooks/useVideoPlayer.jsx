@@ -32,7 +32,22 @@ const useVideoPlayer = (activeEpisode) => {
 		isControlVisible: true,
 		volume: localStorage.getItem('volume') || 0.8,
 		isMuted: false,
+		isBuffering: true,
   })
+
+	const handleBuffer = () => {
+		setVideoState(prev => ({
+			...prev,
+			isBuffering: true,
+		}))
+	}
+
+	const handleBufferEnd = () => {
+		setVideoState(prev => ({
+			...prev,
+			isBuffering: false,
+		}))
+	}
 
 	const togglePlay = () => {
 		const video = videoRef.current?.getInternalPlayer();
@@ -232,61 +247,47 @@ const useVideoPlayer = (activeEpisode) => {
 		}
 	}, [])
 
-		// Exit fullscreen on "escape"
+	// Exit video on "Escape"
 	useEffect(() => {
-		const handleExitFullscreen = (e) => {
-			if (e.key === "Escape") {
-				setVideoState(prev => ({
-					...prev,
-					isFullscreen: false,
-				}));
-			}
-		};
-
-		document.addEventListener("keydown", handleExitFullscreen);
-
-		return () => {
-			document.removeEventListener("keydown", handleExitFullscreen);
-		};
-	}, []);
-
-	// Exit fullscreen on iphone
-	useEffect(() => {
-		const handleFullscreenChange  = (e) => {
+		const handleFullscreenChange = () => {
 			setVideoState(prev => ({
 				...prev,
 				isFullscreen: screenfull.isFullscreen,
-			}))
+			}));
+		};
+	
+		if (screenfull.isEnabled) {
+			screenfull.on("change", handleFullscreenChange);
 		}
-
-		if(screenfull.isEnabled) {
-			screenfull.on("change", handleFullscreenChange)
-		}
-
+	
 		return () => {
-			if(screenfull.isEnabled) {
-				screenfull.off("change", handleFullscreenChange)
+			if (screenfull.isEnabled) {
+				screenfull.off("change", handleFullscreenChange);
 			}
-		}
-	}, [])
+		};
+	}, []);
 
-	// Lookinh for video pausing
+	// Exit and pause video on mobile
 	useEffect(() => {
-		const video = videoRef?.current?.getInternalPlayer()
-		if(!video) return
-
-		const handlePause = () => {
+		const video = videoRef?.current?.getInternalPlayer();
+		if (!video) return;
+	
+		const handleExitFullscreen = () => {
 			setVideoState(prev => ({
 				...prev,
+				isFullscreen: false,
 				isPlaying: false,
-			}))
-		}
+			}));
+		};
+	
+		video.addEventListener("webkitendfullscreen", handleExitFullscreen);
+	
+		return () => {
+			video.removeEventListener("webkitendfullscreen", handleExitFullscreen);
+		};
+	}, []);
 
-		video.addEventListener("pause", handlePause)
-		return () => video.removeEventListener("pause", handlePause)
-	}, [])
-
-	return { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible }
+	return { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible, handleBuffer, handleBufferEnd }
 }
 
 export default useVideoPlayer

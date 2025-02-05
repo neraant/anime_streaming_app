@@ -1,5 +1,6 @@
 import { FaChevronLeft, FaChevronRight, FaCompress, FaExpand, FaPause, FaPlay, FaVolumeDown, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
+import { BounceLoader } from 'react-spinners';
 import useEpisodes from '../../../hooks/useEpisodes';
 import useVideoPlayer from '../../../hooks/useVideoPlayer';
 import useVideoQuality from '../../../hooks/useVideoQuality';
@@ -7,9 +8,9 @@ import useVideoQuality from '../../../hooks/useVideoQuality';
 const VideoPlayer = ({ anime }) => {
 	const { episodesContainerRef, episodesListRef, episodes, handleEpisodes } = useEpisodes(anime)
 
-	const { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible } = useVideoPlayer(episodes.activeEpisode)
+	const { videoRef, videoContainerRef, videoState, togglePlay, toggleFullscreen, handleSeek, handleReady, handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible, handleBuffer, handleBufferEnd } = useVideoPlayer(episodes.activeEpisode)
 
-	const { qualities, activeQuality, setActiveQuality, isShowQuality, setIsShowQuality, handleVideoQuality, REVERSE_QUALITY_MAP } = useVideoQuality(anime, episodes, videoRef)
+	const { qualities, activeQuality, isShowQuality, setIsShowQuality, handleVideoQuality, REVERSE_QUALITY_MAP } = useVideoQuality(anime, episodes, videoRef)
 
 	const showPreview = () => {
 		if(videoRef.current && !videoState.isPlaying) {
@@ -28,16 +29,26 @@ const VideoPlayer = ({ anime }) => {
 				ref={videoContainerRef}
 			>
 				<div 
-					className="relative w-full overflow-hidden rounded-md" style={{ aspectRatio: "16/9" }}
+					className="relative w-full overflow-hidden rounded-md bg-black" style={{ aspectRatio: "16/9" }}
 					onClick={(!episodes.activeEpisode && !videoState.isPlaying) ? showPreview : togglePlay}
 				>
+					{videoState.isBuffering && (
+						<div className='absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]'>
+							<BounceLoader color='#ad46ff' />
+						</div>
+					)}
+
 					<ReactPlayer 
 						width="100%"
 						height="100%"
 						ref={videoRef}
 						controls={false}
 						playsinline 
+						
 						onReady={handleReady}
+						onBuffer={handleBuffer}
+						onBufferEnd={handleBufferEnd}
+
 						playing={videoState.isPlaying}
 						url={`https://cache.libria.fun/${anime.player.list[episodes.activeEpisode]?.hls[REVERSE_QUALITY_MAP[activeQuality]] || ""}`}
 						light={"/images/watch_bg.png"}
