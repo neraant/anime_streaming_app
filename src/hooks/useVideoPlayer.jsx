@@ -247,12 +247,13 @@ const useVideoPlayer = (activeEpisode) => {
 		}
 	}, [])
 
-	// Exit video on "Escape"
+	// Exit and pause video on "Escape"
 	useEffect(() => {
 		const handleFullscreenChange = () => {
 			setVideoState(prev => ({
 				...prev,
 				isFullscreen: screenfull.isFullscreen,
+				isPlaying: !!document.fullscreenElement,
 			}));
 		};
 	
