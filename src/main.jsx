@@ -6,6 +6,7 @@ import App from './App.jsx'
 import Preloader from './components/common/Preloader.jsx'
 import { SidebarProvider } from './contexts/SidebarContext'
 import './index.css'
+import AnimeSearch from './pages/AnimeSearch.jsx'
 
 // pages with lazy loading
 const Home = lazy(() => import('./pages/Home'))
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
     element: 
       <Suspense fallback={<Preloader />} >
         <Home />
+      </Suspense>,
+    errorElement: <NotFound />,
+  },
+  {
+    path: '/anime/search',
+    element: 
+      <Suspense fallback={<Preloader />} >
+        <AnimeSearch />
       </Suspense>,
     errorElement: <NotFound />,
   },

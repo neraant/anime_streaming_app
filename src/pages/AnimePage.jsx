@@ -64,7 +64,9 @@ const AnimePage = () => {
 				<div className="screen-max-width relative">
 					<div className='flex flex-col items-center md:flex-row md:items-start gap-4 w-full mb-6'>
 						<div className='flex flex-col'>
-							<div className='w-[250px] h-[355px] rounded-md bg-gray-700 animate-pulse' />
+							<div className='w-[350px] h-[400px] rounded-md bg-gray-700 animate-pulse' />
+
+							<div className='w-full h-[28px] mt-1 rounded-md bg-gray-700 animate-pulse' />
 						</div>
 
 						<div className="flex flex-col w-full h-full">

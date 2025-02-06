@@ -8,7 +8,6 @@ export const fetchAllAnimeData = async ({animeName = '', page = 1}) => {
 	const params = {
 		page,
 		limit: 20,
-		filter: 'id,name,genres,poster,year',
 	}
 
 	if(animeName) {

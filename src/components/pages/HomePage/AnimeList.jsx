@@ -6,7 +6,7 @@ import { useDebounce } from 'use-debounce';
 import { fetchAllAnimeData } from '../../../api/anilibriaApi';
 import AnimeListItem from './AnimeListItem';
 
-const AnimeList = ({ animeInput }) => {
+const AnimeList = ({ animeInput, isSearching = false }) => {
 	const [debouncedAnimeInput] = useDebounce(animeInput, 700)
 	const [isFading, setIsFading] = useState(false)
 	const [visibleAnime, setVisibleAnime] = useState(20)
@@ -60,7 +60,7 @@ const AnimeList = ({ animeInput }) => {
 		return (
 			<div className="screen-max-width w-full">
 				<h3 className='flex items-center gap-2 text-3xl text-white font-semibold mb-4'>
-					Аниме
+					{!isSearching ? 'Аниме' : "Найдено"}
 					{isLoading && (
 						<FaSpinner className='animate-spin' fontSize={24} />
 					)}
@@ -109,7 +109,7 @@ const AnimeList = ({ animeInput }) => {
 			<div className="pb-8">
 				<div className="flex justify-between items-center">
 					<h3 className='flex items-center gap-2 text-3xl text-white font-semibold mb-4'>
-						Аниме 
+						{!isSearching ? 'Аниме' : "Найдено"}
 						<span className='text-purple-500 text-sm mt-auto mb-[6px]'>
 							({meta.pagination.total})
 						</span>
@@ -148,7 +148,7 @@ const AnimeList = ({ animeInput }) => {
 										}
 									}}
 								>
-									Загрузить ещё {animeList.length}
+									Загрузить ещё
 								</button>
 							</div>
 						)}

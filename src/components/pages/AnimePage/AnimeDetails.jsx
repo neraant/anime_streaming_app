@@ -78,7 +78,7 @@ const AnimeDetails = ({ anime }) => {
 							</span>
 
 							<span className='text-white font-semibold text-sm'>
-								{`${anime.episodes_total} эп.`}
+								{anime.episodes_total ? `${anime.episodes_total} эп.` : "Нет информации"}
 							</span>
 						</div>
 
@@ -88,7 +88,7 @@ const AnimeDetails = ({ anime }) => {
 							</span>
 
 							<span className='text-white font-semibold text-sm'>
-								{anime.average_duration_of_episode ? `~ ${anime.average_duration_of_episode} мин.` : "no information"}
+								{anime.average_duration_of_episode ? `~ ${anime.average_duration_of_episode} мин.` : "Нет информации"}
 							</span>
 						</div>
 

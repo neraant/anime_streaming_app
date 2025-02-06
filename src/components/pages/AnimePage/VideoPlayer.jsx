@@ -35,7 +35,10 @@ const VideoPlayer = ({ anime, handleEpisodeChange, episodeInfo: {episodeInfo} })
 					className="relative w-full overflow-hidden rounded-md bg-black" style={{ aspectRatio: "16/9" }}
 					onClick={(!episodes.activeEpisode && !videoState.isPlaying) ? showPreview : togglePlay}
 					onMouseMove={videoState.isPlaying ? resetTimer : null}
-					onTouchStart={resetTimer}
+					onTouchStart={() => { 
+						resetTimer(); 
+						setVideoState(prev => ({ ...prev, isControlVisible: true })); 
+					}}
 				>
 					{videoState.isBuffering && (
 						<div className='absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]'>
