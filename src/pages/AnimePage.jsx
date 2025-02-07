@@ -28,8 +28,8 @@ const episodeReducer = (state, action) => {
 }
 
 const AnimePage = () => {
-	const query = useQueryParams()
-	const animeId = query.get("id")
+	const queryParams = new URLSearchParams(useLocation().search)
+	const animeId = queryParams.get("id")
 
 	const navigate = useNavigate()
 

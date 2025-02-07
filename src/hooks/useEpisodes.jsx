@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 const useEpisodes = (anime, handleEpisodeChange) => {
 	const episodesContainerRef = useRef()
@@ -12,15 +12,42 @@ const useEpisodes = (anime, handleEpisodeChange) => {
 		episodesPerPage: 1,
 	})
 
+	// Episode per page
+	const episodesPerPage = useMemo(() => {
+		if (!episodesContainerRef.current) return 1;
+		return Math.floor(episodesContainerRef.current.offsetWidth / 80);
+	}, [episodesContainerRef.current])
+
+	const maxOffset = useMemo(() => {
+		return Math.ceil(episodes.totalEpisodesWidth / episodes.episodesOffsetWidth) - 1
+	}, [episodes.totalEpisodesWidth, episodes.episodesOffsetWidth])
+
+	// Size of episodes line
+	const updateSizes = useCallback(() => {
+		const container = episodesContainerRef.current
+		const list = episodesListRef.current
+		
+		if (container && list) {
+			const containerWidth = container.offsetWidth
+			const totalWidth = list.scrollWidth
+
+			setEpisodes(prev => ({
+				...prev,
+				episodesOffsetWidth: containerWidth,
+				totalEpisodesWidth: totalWidth,
+				episodesPerPage
+			}))
+		}
+	}, [])
+
 	// Episodes control
-	const handleEpisodes = (type, key = null) => {
+	const handleEpisodes = useCallback((type, key = null) => {
 		setEpisodes(prev => {
 			let newOffset = prev.episodesOffset
 		
 			switch (type) {
 				case "next": {
-					const maxOffset = Math.ceil(prev.totalEpisodesWidth / prev.episodesOffsetWidth) - 1;
-					if (newOffset < maxOffset) {
+					if (prev.episodesOffsetWidth > 0 && newOffset < maxOffset) {
 						newOffset += 1;
 					}
 					break;
@@ -45,33 +72,14 @@ const useEpisodes = (anime, handleEpisodeChange) => {
 		})
 
 		if(type === "change" && key !== null) {
-			handleEpisodeChange(anime.episodes[key])
+			handleEpisodeChange(anime?.episodes[key])
 		}
-	}
+	}, [anime, maxOffset, handleEpisodeChange])
 
 	// Calc scroll offset
 	useEffect(() => {
-		const updateSizes = () => {
-			const container = episodesContainerRef.current
-			const list = episodesListRef.current
-			
-			if (container && list) {
-				const containerWidth = container.offsetWidth
-				const totalWidth = list.scrollWidth
-				const episodesPerPage = Math.floor(containerWidth / 80)
-
-				setEpisodes(prev => ({
-					...prev,
-					episodesOffsetWidth: containerWidth,
-					totalEpisodesWidth: totalWidth,
-					episodesPerPage
-				}))
-			}
-		}
-
 		updateSizes()
 		window.addEventListener("resize", updateSizes)
-		
 		return () => {
 			window.removeEventListener("resize", updateSizes)
 		}

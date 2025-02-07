@@ -1,8 +1,11 @@
 import { FaChevronDown, FaRightToBracket } from 'react-icons/fa6'
+import { useNavigate } from 'react-router-dom'
 import { useSidabar } from '../../contexts/SidebarContext'
+import { logOut } from '../../Services/firebaseAuthService'
 
 const Sidebar = () => {
 	const {isSidebar, setIsSidebar} = useSidabar()
+	const navigate = useNavigate()
 	
 	return (
 		<aside className={`absolute top-0 left-0 w-full max-w-[350px] h-[100dvh] transition-all duration-500 ${isSidebar ? 'left-[0px]' : 'left-[-120%]'}`}>
@@ -54,10 +57,16 @@ const Sidebar = () => {
 					</li>
 
 					<li className='text-white text-base mt-auto px-8'>
-						<a href="#" className='flex gap-2' >
+						<button 
+							onClick={() => {
+								logOut();
+								navigate("/anime")
+							}} 
+							className='flex gap-2 cursor-pointer' 
+						>
 							<FaRightToBracket fontSize={20} />
 							Выйти
-						</a>
+						</button>
 					</li>
 				</ul>
 			</div>

@@ -27,14 +27,14 @@ const WelcomePage = () => {
 			scale: 1,
 			opacity: 1,
 			duration: 0.6,
-		}),
+		});
 
 		// Див с текстом
 		gsap.to(".div-anim", {
 			y: 0,
 			opacity: 1,
 			delay: 0.6,
-		}),
+		});
 
 		// Анимация тени
 		gsap.to(".left-shadow", {
@@ -44,7 +44,7 @@ const WelcomePage = () => {
 			repeat: -1,
 			yoyo: true,
 			ease: "power1.inOut"
-		}),
+		});
 
 		// Анимация тени
 		gsap.to(".right-shadow", {
@@ -54,11 +54,11 @@ const WelcomePage = () => {
 			repeat: -1,
 			yoyo: true,
 			ease: "power1.inOut"
-		})
+		});
 	}, [])
 
 	const handleButtonClick = () => {
-		animRef.current.play()
+		animRef.current?.play()
 
 		setTimeout(() => {	
 			navigate('/anime')
@@ -78,12 +78,12 @@ const WelcomePage = () => {
 			</div>
 			
 			<div className="screen-max-width flex flex-col items-center div-anim opacity-0 translate-y-[20px]">
-				<h1 className=' text-3xl text-center text-white mb-5 mt-5'>
-					Регистрация
+				<h1 className=' text-3xl text-center text-white mb-5 mt-5 font-semibold'>
+					Войти
 				</h1>
 
 				<p className='text-white text-base text-center mb-8'>
-					Смотри аниме здесь с AniLibria!
+					Смотри аниме здесь с озвучкой AniLibria!
 				</p>
 
 				<button

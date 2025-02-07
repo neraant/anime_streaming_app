@@ -52,7 +52,6 @@ const useVideoVolume = (videoRef, setVideoState, videoState) => {
 		if(!video) return
 
 		video.volume = videoState.volume
-		console.log("volume changed");
 	}, [videoState.isReady])
 
 	return {handleVolumeChange, handleMuted, showVolume, hideVolume, isVolumeVisible}

@@ -27,7 +27,7 @@ const useVideoPlayer = (activeEpisode) => {
     endTime: "00:00",
     isReady: false,
 		isControlVisible: true,
-		volume: localStorage.getItem('volume') || 0.8,
+		volume: parseFloat(localStorage.getItem('volume')) || 0.8,
 		isMuted: false,
 		isBuffering: true,
   })
@@ -97,14 +97,16 @@ const useVideoPlayer = (activeEpisode) => {
 		const video = videoRef.current.getInternalPlayer()
 		if(!video) return
 
-		const seekTo = (e.target.value / 100) * video.duration
-		video.currentTime = seekTo
-
-		setVideoState(prev => ({
-			...prev,
-			progress: e.target.value,
-			currentTime: formatTime(seekTo)
-		}))
+		if(video.duration) {
+			const seekTo = (e.target.value / 100) * video.duration
+			video.currentTime = seekTo
+	
+			setVideoState(prev => ({
+				...prev,
+				progress: e.target.value,
+				currentTime: formatTime(seekTo)
+			}))
+		}
 	}
 
 	const handleReady = () => {

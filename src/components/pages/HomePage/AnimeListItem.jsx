@@ -8,8 +8,9 @@ const AnimeListItem = ({ anime, isFading }) => {
 		>
 			<div className="relative w-full min-h-[380px] max-h-[380px] rounded-lg overflow-hidden group">
 				<img 
-					src={`https://anilibria.top${anime.poster.optimized.src}` || null}
+					src={`https://anilibria.top${anime.poster.optimized.src}` || '/images/no_anime_banner.png'}
 					className='bg-gray-700 w-full h-full object-cover transition-all duration-300 hover:scale-[1.05] hover:brightness-70'
+					alt='banner'
 				/>
 
 				{anime?.genres && (
