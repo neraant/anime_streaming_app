@@ -3,7 +3,7 @@ import { db } from '../firebase/firebaseConfig'
 
 export const createUser = async (user) => {
 	try {
-		const userRef = doc(db, "Users", user.uid) 
+		const userRef = doc(db, "users", user.uid) 
 		const docSnap = await getDoc(userRef)
 
 		if(!docSnap.exists()) {
@@ -22,7 +22,7 @@ export const createUser = async (user) => {
 
 export const getUser = async (uid) => {
 	try {
-		const userRef = doc(db, "Users", uid)
+		const userRef = doc(db, "users", uid)
 		const docSnap = await getDoc(userRef)
 
 		if(docSnap.exists()) {
@@ -37,15 +37,11 @@ export const getUser = async (uid) => {
 
 export const updateUser = async (uid, displayName) => {
 	try {
-		const userRef = doc(db, "Users", uid)
+		const userRef = doc(db, "users", uid)
 		await updateDoc(userRef, {
 			displayName,
 		})
 	} catch (error) {
 		console.error(error)
 	}
-}
-
-export const deleteUser = async () => {
-	// Deleting user 
 }

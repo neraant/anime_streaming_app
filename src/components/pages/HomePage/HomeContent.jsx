@@ -7,9 +7,7 @@ const HomeContent = ({ animeInput, setAnimeInput }) => {
 		e.preventDefault()
 
 		if(animeInput.trim()) {
-			navigate(`/anime/search?query=${encodeURIComponent(animeInput)}`, {
-				replace: true
-			})
+			navigate(`/anime/search?query=${encodeURIComponent(animeInput)}`)
 		}
 	}
 	

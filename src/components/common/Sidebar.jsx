@@ -7,6 +7,16 @@ const Sidebar = () => {
 	const {isSidebar, setIsSidebar} = useSidabar()
 	const navigate = useNavigate()
 	
+	const handleSignOut = async () => {
+		try {
+			await logOut()
+			location.reload()
+			navigate("/anime")
+		} catch (error) {
+			console.error("Ошибка во время выхода из аккаунта: ", error)
+		}
+	}
+
 	return (
 		<aside className={`absolute top-0 left-0 w-full max-w-[350px] h-[100dvh] transition-all duration-500 ${isSidebar ? 'left-[0px]' : 'left-[-120%]'}`}>
 			<div className='absolute left-0 top-0 w-full z-50 bg-gray-900 h-[100dvh] shadow-inner py-8'>
@@ -58,10 +68,7 @@ const Sidebar = () => {
 
 					<li className='text-white text-base mt-auto px-8'>
 						<button 
-							onClick={() => {
-								logOut();
-								navigate("/anime")
-							}} 
+							onClick={handleSignOut} 
 							className='flex gap-2 cursor-pointer' 
 						>
 							<FaRightToBracket fontSize={20} />

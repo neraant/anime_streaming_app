@@ -6,12 +6,12 @@ import { getStorage } from 'firebase/storage';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: "anime-streaming-app-f3795.firebaseapp.com",
-  projectId: "anime-streaming-app-f3795",
-  storageBucket: "anime-streaming-app-f3795.firebasestorage.app",
-  messagingSenderId: "980643407923",
-  appId: "1:980643407923:web:48ec278620c930434b1b46"
+  apiKey: "AIzaSyCkurGclzN15PY83hcXAV4JYXEYU3GCWbw",
+  authDomain: "anime-streaming-app-639d3.firebaseapp.com",
+  projectId: "anime-streaming-app-639d3",
+  storageBucket: "anime-streaming-app-639d3.firebasestorage.app",
+  messagingSenderId: "306777210354",
+  appId: "1:306777210354:web:eccf6da172750e48e03f6b"
 };
 
 // Initialize Firebase

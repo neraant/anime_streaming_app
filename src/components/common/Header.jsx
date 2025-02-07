@@ -81,11 +81,11 @@ const Header = () => {
 					</div>
 
 					{windowSize && (
-						<a href="/anime">
+						<Link to="/anime">
 							<h1 className='text-white font-semibold text-5xl mr-[186px]'>
 								AniAnt
 							</h1>
-						</a>
+						</Link>
 					)}
 
 					<button 

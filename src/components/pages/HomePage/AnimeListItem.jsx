@@ -1,15 +1,64 @@
+import { useEffect, useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { useUser } from '../../../contexts/UserContext';
+import { addFavorite, isFavorite, removeFavorite } from '../../../services/firebaseFavoritesServices';
 
 const AnimeListItem = ({ anime, isFading }) => {
+	const { user, isAuthenticated, isLoading } = useUser() 
+	const [isFavoriteAnime, setIsFavoriteAnime] = useState(false)
+
+	useEffect(() => {
+		const getIsFavoriteAnime = async () => {
+			if(user?.uid && anime.id) {
+				try {
+					const isFav = await isFavorite(user?.uid, String(anime?.id))
+					setIsFavoriteAnime(isFav)
+				} catch (error) {
+					console.error("Ошибки при выявлении является ли аниме понравившимся: ", error)
+				}
+			}
+		}
+		getIsFavoriteAnime()
+	}, [isLoading])
+
+	const handleAddTofavorites = async (e) => {
+		e.preventDefault()
+
+		const favoriteAnime = {
+			id: anime?.id, 
+			name: anime.name,
+			genres: anime?.genres,
+			year: anime?.year,
+			favoritesIn: anime?.added_in_users_favorites,
+			poster: anime.poster,
+			url: `/anime/${anime?.alias}?id=${anime?.id}`,
+		}
+
+		try {
+			if(!isFavoriteAnime) {	
+				await addFavorite(user?.uid, anime?.id, favoriteAnime)
+				setIsFavoriteAnime(true)
+				console.log("Аниме добавлено!");
+			} else {
+				await removeFavorite(user?.uid, anime?.id)
+				setIsFavoriteAnime(false)
+				console.log("Аниме удалено!");
+			}
+		} catch (error) {
+			console.error("Ошибка при добавлении аниме в понравившиеся: ", error)
+		}
+	}
+
 	return (
-		<a 
-			href={`/anime/${anime.alias}?id=${anime.id}`} 
-			className={`flex flex-col rounded-lg overflow-hidden w-full max-w-[350px] relative transition-opacity duration-300 ${isFading ? 'opacity-0' : 'opacity-100'}`}
+		<Link 
+			to={`/anime/${anime.alias}?id=${anime.id}`} 
+			className={`realtive z-0 flex flex-col rounded-lg overflow-hidden w-full max-w-[350px] relative transition-opacity duration-300 group ${isFading ? 'opacity-0' : 'opacity-100'}`}
 		>
-			<div className="relative w-full min-h-[380px] max-h-[380px] rounded-lg overflow-hidden group">
+			<div className="relative w-full min-h-[380px] max-h-[380px] rounded-lg overflow-hidden">
 				<img 
 					src={`https://anilibria.top${anime.poster.optimized.src}` || '/images/no_anime_banner.png'}
-					className='bg-gray-700 w-full h-full object-cover transition-all duration-300 hover:scale-[1.05] hover:brightness-70'
+					className='bg-gray-700 w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.05] group-hover:brightness-70'
 					alt='banner'
 				/>
 
@@ -43,7 +92,16 @@ const AnimeListItem = ({ anime, isFading }) => {
 					</span>
 				</div>
 			)}
-		</a>
+
+			{isAuthenticated && (
+				<button 
+					className='absolute z-1 top-5 right-5 cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100'
+					onClick={handleAddTofavorites}
+				>
+					<FaHeart size={28} color={isFavoriteAnime ? "#ad46ff" : "white"} />
+				</button>
+			)}
+		</Link>
 	)
 }
 
