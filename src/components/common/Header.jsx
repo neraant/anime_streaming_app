@@ -52,7 +52,7 @@ const Header = () => {
 					<div className="flex items-center gap-2">
 						<Link 
 							to={`/profile`}
-							className='relative rounded-full overflow-hidden w-14 h-14'
+							className='relative rounded-full overflow-hidden w-12 h-12 sm:w-14 sm:h-14'
 						>
 							<img 
 								src={user?.photoURL || userIcon}
@@ -68,9 +68,9 @@ const Header = () => {
 						</Link>
 
 						<div>
-							<p className='text-white font-semibold text-base'>Добро пожаловать!</p>
+							<p className='text-white font-semibold text-sm sm:text-base'>Добро пожаловать!</p>
 
-							<span className='text-white text-lg flex items-center gap-2'>
+							<span className='text-white text-base sm:text-lg flex items-center gap-2'>
 								{user?.displayName || "Гость"}
 								
 								{isLoading && (

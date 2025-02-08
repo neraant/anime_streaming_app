@@ -13,7 +13,7 @@ export const addFavorite = async (uid, animeId, anime) => {
 
 export const removeFavorite = async (uid, animeId) => {
 	try {
-		const favoriteRef = doc(db, `users/${uid}/favorites`, animeId)
+		const favoriteRef = doc(db, `users/${uid}/favorites`, String(animeId))
 		await deleteDoc(favoriteRef)
 		console.log("Favourite removed!");
 	} catch (error) {

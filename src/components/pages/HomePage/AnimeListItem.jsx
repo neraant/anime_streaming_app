@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useUser } from '../../../contexts/UserContext';
-import { addFavorite, isFavorite, removeFavorite } from '../../../services/firebaseFavoritesServices';
+import { addFavorite, isFavorite, removeFavorite } from '../../../Services/firebaseFavoritesServices';
 
 const AnimeListItem = ({ anime, isFading }) => {
 	const { user, isAuthenticated, isLoading } = useUser() 
@@ -22,13 +22,13 @@ const AnimeListItem = ({ anime, isFading }) => {
 		getIsFavoriteAnime()
 	}, [isLoading])
 
-	const handleAddTofavorites = async (e) => {
+	const handleFavorites = async (e) => {
 		e.preventDefault()
 
 		const favoriteAnime = {
 			id: anime?.id, 
 			name: anime.name,
-			genres: anime?.genres,
+			genres: anime?.genres || null,
 			year: anime?.year,
 			favoritesIn: anime?.added_in_users_favorites,
 			poster: anime.poster,
@@ -59,7 +59,7 @@ const AnimeListItem = ({ anime, isFading }) => {
 				<img 
 					src={`https://anilibria.top${anime.poster.optimized.src}` || '/images/no_anime_banner.png'}
 					className='bg-gray-700 w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.05] group-hover:brightness-70'
-					alt='banner'
+					alt='poster'
 				/>
 
 				{anime?.genres && (
@@ -95,10 +95,10 @@ const AnimeListItem = ({ anime, isFading }) => {
 
 			{isAuthenticated && (
 				<button 
-					className='absolute z-1 top-5 right-5 cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100'
-					onClick={handleAddTofavorites}
+					className={`absolute z-1 top-5 right-5 cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100 ${isFavoriteAnime ? "text-[#ad46ff]" : "text-white"}`}
+					onClick={handleFavorites}
 				>
-					<FaHeart size={28} color={isFavoriteAnime ? "#ad46ff" : "white"} />
+					<FaHeart size={28} />
 				</button>
 			)}
 		</Link>

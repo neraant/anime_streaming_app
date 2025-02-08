@@ -46,7 +46,7 @@ const ProfileDetails = () => {
 	// Getting user
 	useEffect(() => {
 		const getUserData = async () => {
-			if(user) {
+			if(user?.uid) {
 				try {
 					const userData = await getUser(user?.uid)
 					setEditName(userData.displayName)
@@ -89,7 +89,7 @@ const ProfileDetails = () => {
 			<div className="screen-max-width">
 				{/* avatar - name - email */}
 				<div className="flex items-center gap-4">
-					<div className="relative overflow-hidden w-30 h-30 rounded-full group bg-purple-500">
+					<div className="relative overflow-hidden w-20 h-20 sm:w-30 sm:h-30 rounded-full group bg-purple-500">
 						<img 
 							className='relative z-0 left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] rounded-full w-full h-full object-cover transition-all border-b-1 border-b-transparent duration-300'
 							src={user?.photoURL || '/images/user_icon.svg'} 
@@ -113,22 +113,25 @@ const ProfileDetails = () => {
 								</button>
 							</div>
 						) : (
-							<h3 className='font-semibold text-2xl text-white flex items-center gap-2 '>
+							<h3 className='font-semibold text-base sm:text-2xl text-white flex items-center gap-2'>
 								{user?.displayName || "Гость"}
 
-								<button className='cursor-pointer' onClick={() => setIsEditName(true)}>
-									<FaPen size={16} />
+								<button 
+									className='cursor-pointer text-sm sm:text-base' 
+									onClick={() => setIsEditName(true)}
+								>
+									<FaPen />
 								</button>
 							</h3>
 						)}
 
-						<span className='text-sm text-gray-300'>
+						<span className='text-xs sm:text-sm text-gray-300'>
 							{user?.email || "example@gmail.com"}
 						</span>
 					</div>
 
 					<button 
-						className='py-2 px-4 rounded-md bg-red-500 ml-auto text-white transition-all duration-300 hover:bg-red-700 cursor-pointer'
+						className='py-2 px-4 rounded-md bg-red-500 ml-auto text-white transition-all duration-300 hover:bg-red-700 cursor-pointer hidden sm:flex'
 						onClick={handleSignOut}	
 					>
 						Выйти
