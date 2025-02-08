@@ -29,17 +29,17 @@ const AuthForms = () => {
 
 	return (
 		<>
-			<div   
+			<div
 				className={`absolute top-5 left-[50%] translate-x-[-50%] p-3 rounded-md bg-red-500 flex items-center justify-center gap-2 transition-all duration-300 ease-in-out pointer-events-none ${validateMessage ? "opacity-100 scale-x-100 w-full max-w-120" : "opacity-0 scale-x-0 w-0 max-w-0"}`}
 			>
 				<FaXmark color='white' />
 
-				<p className='text-white '>
+				<p className='text-white text-center'>
 					{validateMessage}
 				</p>
 			</div>
 
-			<section className='max-h-[100dvh] pb-4'>
+			<section className='pb-4'>
 				<div className="screen-max-width">
 					<div className="w-full h-full flex flex-col items-center overflow-hidden">
 						<img 

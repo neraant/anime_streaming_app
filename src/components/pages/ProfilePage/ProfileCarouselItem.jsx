@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { addFavorite, removeFavorite } from '../../../Services/firebaseFavoritesServices';
 import { useUser } from '../../../contexts/UserContext';
+import { addFavorite, removeFavorite } from '../../../Services/firebaseFavoritesServices';
 
-const ProfileCarouselItem = ({ anime }) => {
+const ProfileCarouselItem = ({ anime, action, contentList, setContentList }) => {
 	const { user } = useUser()
 	const [isFavoriteAnime, setIsFavoriteAnime] = useState(true)
 
 	const handleFavorites = async (e) => {
 		e.preventDefault()
 
-		console.log(anime);
-
 		const favoriteAnime = {
-			id: anime?.id, 
-			name: anime.name,
+			id: anime?.id || null, 
+			name: anime.name || null,
 			genres: anime?.genres || null,
-			year: anime?.year,
+			year: anime?.year || null,
 			favoritesIn: anime?.added_in_users_favorites || anime?.favoritesIn,
-			poster: anime.poster,
+			poster: anime.poster || null,
 			url: `/anime/${anime?.alias}?id=${anime?.id}`,
 		}
 
@@ -58,14 +56,14 @@ const ProfileCarouselItem = ({ anime }) => {
 				</div>
 			</div>
 
-			<div className="">
+			{action === "favorite" && (
 				<button 
 					className={`absolute z-1 top-5 right-5 cursor-pointer transition-all duration-300 ${isFavoriteAnime ? "text-[#ad46ff]" : "text-white"}`}
 					onClick={handleFavorites}
 				>
-					<FaHeart size={28}  />
+					<FaHeart size={28} />
 				</button>
-			</div>
+			)}
 		</Link>
 	)
 }

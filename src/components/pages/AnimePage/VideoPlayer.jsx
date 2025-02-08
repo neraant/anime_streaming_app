@@ -66,7 +66,7 @@ const VideoPlayer = ({ anime, handleEpisodeChange, episodeInfo: {episodeInfo} })
 
 				<div className={`transition-all duration-500 ${videoState.isControlVisible && videoState.isReady ? 'opacity-100' : 'opacity-0'}`}> 
 					{/* play/pause */}
-					<div className={`absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-[#00000090] rounded-full transition-opacity duration-300`}>
+					<div className="absolute top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] bg-[#00000090] rounded-full transition-opacity duration-300 pointer-events-none" >
 						<button 
 							className='cursor-pointer flex-center p-5'
 							onClick={episodes.activeEpisode && togglePlay}

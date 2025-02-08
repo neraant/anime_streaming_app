@@ -1,4 +1,4 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,6 +7,8 @@ import Layout from '../components/common/Layout';
 import AnimeDetails from '../components/pages/AnimePage/AnimeDetails';
 import EpisodeDetails from '../components/pages/AnimePage/EpisodeDetails';
 import VideoPlayer from '../components/pages/AnimePage/VideoPlayer';
+import { useUser } from '../contexts/UserContext';
+import { addHistory } from '../Services/firebaseHistoryServices';
 
 const useQueryParams = () => {
 	return new URLSearchParams(useLocation().search)
@@ -33,6 +35,9 @@ const AnimePage = () => {
 
 	const navigate = useNavigate()
 
+	// Getting user info
+	const { user, isAuthenticated } = useUser()
+
 	// Store episode data (name, date etc.)
 	const initialState = {
 		episodeInfo: {
@@ -42,12 +47,14 @@ const AnimePage = () => {
 	}
 	const [state, dispatch] = useReducer(episodeReducer, initialState)
 
+	// Load data
 	const { data, isLoading, isError, error } = useQuery(
 		["anime", animeId], 
 		() => fetchAnimeData(animeId),
 		{ enabled: !!animeId, retry: 3, retryDelay: 5000, refetchOnWindowFocus: false }
 	)
 
+	// Getting episode info
 	const handleEpisodeChange = useCallback((episode) => {
 		dispatch({
 			type: "change",
@@ -57,6 +64,30 @@ const AnimePage = () => {
 			}
 		})
 	}, [dispatch])
+
+	// Adding anime to history
+	useEffect(() => {
+		const addAnimeToHistory = async () => {		
+			if(user?.uid && data) {
+				const updatedAnime = {
+					id: data?.id || null, 
+					name: data?.name || null,
+					genres: data?.genres || null,
+					year: data?.year || null,
+					favoritesIn: data?.added_in_users_favorites || data?.favoritesIn,
+					poster: data.poster || null,
+					url: `/anime/${data?.alias}?id=${data?.id}`,
+				}
+
+				try {
+					await addHistory(user?.uid, data?.id, updatedAnime)
+				} catch (error) {
+					console.error("Ошибка при добавлении в историю: ", error)
+				}
+			}
+		}
+		addAnimeToHistory()
+	}, [data])
 
 	if(isLoading) {
 		return (
@@ -120,8 +151,8 @@ const AnimePage = () => {
 							className='w-fit py-2 px-3 bg-purple-500 rounded-md text-white text-base cursor-pointer flex gap-2 items-center  transition-all duration-300 hover:bg-purple-400'
 							onClick={() => navigate(-1)}
 						>
-						<FaArrowLeft fontSize={16} className='relative bottom-[1px]' /> 
-						Вернуться назад
+							<FaArrowLeft fontSize={16} className='relative bottom-[1px]' /> 
+							Вернуться назад
 						</button>
 					</div>
 				</div>

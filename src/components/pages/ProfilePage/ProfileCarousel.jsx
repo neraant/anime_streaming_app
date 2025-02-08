@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-import { getFavorites } from '../../../Services/firebaseFavoritesServices'
-import { useUser } from '../../../contexts/UserContext'
 import ProfileCarouselItem from './ProfileCarouselItem'
 
-const ProfileCarousel = ({ title, content }) => {
-	const { user, isLoading } = useUser()
+const ProfileCarousel = ({ title, contentList, setContentList }) => {
 	const [curSlide, setCurSlide] = useState(0)
 	const [visibleSlides, setVisibleSlides] = useState(1)
-	const [favoritesList, setFavoritesList] = useState([])
-	const [totalSlides, setTotalSlides] = useState(favoritesList.length)
+	const [totalSlides, setTotalSlides] = useState(contentList.length)
+	
 	const carouselRef = useRef(null)
 	
 	const slideWidth = 308
@@ -20,18 +17,6 @@ const ProfileCarousel = ({ title, content }) => {
 
 	const prevSlide = () => {
 		setCurSlide(prev => Math.max(prev - 1, 0))
-	}
-
-	const getFavoritesList = async () => {
-		if(user?.uid) {
-			try {
-				const fetchFavoritesList = await getFavorites(user?.uid)
-				setFavoritesList(fetchFavoritesList)
-				setTotalSlides(fetchFavoritesList.length)
-			} catch (error) {
-				console.error("Ошибка при получении списка понравившихся: ", error)
-			}
-		}
 	}
 	
 	// Carousel functionallity
@@ -50,14 +35,13 @@ const ProfileCarousel = ({ title, content }) => {
 
 	// Getting favorites
 	useEffect(() => {
-		getFavoritesList()
-		setTotalSlides(favoritesList.length)
-	}, [user])
+		setTotalSlides(contentList.length)
+	}, [contentList])
 
 	return (
 		<section className='my-12'>
 			<div className="screen-max-width">
-				{favoritesList && favoritesList.length && (
+				{contentList && contentList.length > 0 ? (
 					<div className="flex flex-col gap-4">
 						<h5 className='text-white font-semibold text-xl'>
 							{title}
@@ -69,13 +53,51 @@ const ProfileCarousel = ({ title, content }) => {
 								style={{ transform: `translateX(-${curSlide * slideWidth}px)` }}
 								ref={carouselRef}
 							>
-								{favoritesList && favoritesList.map(({anime: anime}, index) => (
+								{contentList && contentList.slice(0, 10).map(({anime: anime, action: action}, index) => (
 									<ProfileCarouselItem
 										key={index}
 										anime={anime}
+										action={action}
+										setContentList={setContentList}
+										contentList={contentList}
 									/>
 								))}
 							</div>
+
+							<div>
+								<button 
+									className='absolute top-[50%] left-0 translate-y-[-50%] cursor-pointer'
+									onClick={prevSlide}
+								>
+									<FaChevronLeft color='white' size={30} />
+								</button>
+
+								<button 
+									className='absolute top-[50%] right-0 translate-y-[-50%] cursor-pointer'
+									onClick={nextSlide}
+								>
+									<FaChevronRight color='white' size={30} />
+								</button>
+							</div>
+						</div>
+					</div>
+				) : (
+					<div className="relative flex flex-col gap-4">
+						<h5 className='text-white font-semibold text-xl'>
+							{title}
+						</h5>
+
+						<h3 className='text-white text-2xl font-semibold w-full text-center max-w-[50dvw] absolute top-[50%] left-[50%] translate-y-[calc(-50%+28px)] translate-x-[-50%]'>
+							Здесь пока что пусто!
+						</h3>
+
+						<div className="realtive flex gap-2 w-full h-full min-h-[300px] blur-xs">
+							<span className='w-full h-full min-h-[428px] flex-none max-w-[300px] bg-gradient-to-t from-gray-400 to-gray-200 rounded-2xl opacity-50' />
+							<span className='w-full h-full min-h-[428px] flex-none max-w-[300px] bg-gradient-to-t from-gray-400 to-gray-200 rounded-2xl opacity-50' />
+							<span className='w-full h-full min-h-[428px] flex-none max-w-[300px] bg-gradient-to-t from-gray-400 to-gray-200 rounded-2xl opacity-50' />
+							<span className='w-full h-full min-h-[428px] flex-none max-w-[300px] bg-gradient-to-t from-gray-400 to-gray-200 rounded-2xl opacity-50' />
+							<span className='w-full h-full min-h-[428px] flex-none max-w-[300px] bg-gradient-to-t from-gray-400 to-gray-200 rounded-2xl opacity-50' />
+							<span className='w-full h-full min-h-[428px] flex-none max-w-[300px] bg-gradient-to-t from-gray-400 to-gray-200 rounded-2xl opacity-50' />
 
 							<div>
 								<button 

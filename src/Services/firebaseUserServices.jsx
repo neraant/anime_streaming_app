@@ -28,7 +28,6 @@ export const getUser = async (uid) => {
 		if(docSnap.exists()) {
 			return docSnap.data()
 		} else {
-			console.log("Пользователь не существует!");
 		}
 	} catch (error) {
 		console.error(error)

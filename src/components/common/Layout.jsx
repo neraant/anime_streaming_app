@@ -20,10 +20,10 @@ const Layout = ({ children }) => {
 	}, [isSidebar])
 
 	return (
-		<div className='relative w-full h-full overflow-x-hidden'>
+		<div className='w-full h-full overflow-x-hidden'>
 			<Sidebar />
 
-			<div className={`relative w-full h-full min-h-screen transition-transform duration-500 ${isSidebar ? 'translate-x-[350px]' : 'translate-x-0'}`}>
+			<div className={`w-full h-full min-h-screen transition-transform duration-500 ${isSidebar ? 'translate-x-[350px]' : 'translate-x-0'}`}>
 				<Header />
 
 				<main className={`w-full min-h-[calc(100dvh-176px)]`}>

@@ -39,11 +39,9 @@ const AnimeListItem = ({ anime, isFading }) => {
 			if(!isFavoriteAnime) {	
 				await addFavorite(user?.uid, anime?.id, favoriteAnime)
 				setIsFavoriteAnime(true)
-				console.log("Аниме добавлено!");
 			} else {
 				await removeFavorite(user?.uid, anime?.id)
 				setIsFavoriteAnime(false)
-				console.log("Аниме удалено!");
 			}
 		} catch (error) {
 			console.error("Ошибка при добавлении аниме в понравившиеся: ", error)
