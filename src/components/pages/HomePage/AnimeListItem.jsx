@@ -67,6 +67,8 @@ const AnimeListItem = ({ anime, isFading }) => {
 						{anime.genres.map(genre => genre.name).join(" | ")}
 					</span>
 				)}
+
+				<div className="absolute w-full h-full left-0 top-0 bg-gradient-to-b from-[#00000040] to-transparent" />
 			</div>
 
 			<h5 className='text-purple-500 text-base my-2 line-clamp-2'>
@@ -95,7 +97,7 @@ const AnimeListItem = ({ anime, isFading }) => {
 
 			{isAuthenticated && (
 				<button 
-					className={`absolute z-1 top-5 right-5 cursor-pointer transition-all duration-300 opacity-0 group-hover:opacity-100 ${isFavoriteAnime ? "text-[#ad46ff]" : "text-white"}`}
+					className={`absolute z-1 top-5 right-5 cursor-pointer transition-all duration-300 md:opacity-0 opacity-100 group-hover:opacity-100 ${isFavoriteAnime ? "text-[#ad46ff]" : "text-white"}`}
 					onClick={handleFavorites}
 				>
 					<FaHeart size={28} />

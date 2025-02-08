@@ -70,14 +70,14 @@ const AuthSignUpForm = ({ setForm, setValidateMessage }) => {
 	return (
 		<>
 			<form onSubmit={handleSubmitSignInForm} className='flex flex-col items-center w-full flex-none'>
-				<h2 className='text-white font-semibold text-2xl md:text-3xl'>
+				<h2 className='text-white font-semibold text-xl md:text-3xl'>
 					Войти в аккаунт
 				</h2>
 
-				<div className="flex flex-col gap-6 w-full mt-10 max-w-100">
+				<div className="flex flex-col gap-4 md:gap-6 w-full mt-4 md:mt-8 max-w-100">
 					<label className='relative' htmlFor="signInEmail">
 						<span 
-							className="top-[50%] translate-y-[-50%] absolute left-3 text-gray-300 flex items-center gap-2"
+							className="top-[50%] translate-y-[-50%] absolute left-3 text-gray-300 text-sm md:text-base flex items-center gap-2"
 						>
 							<FaEnvelope />
 							
@@ -102,7 +102,7 @@ const AuthSignUpForm = ({ setForm, setValidateMessage }) => {
 					<div className="">
 						<label className='relative' htmlFor="signInPassword">
 							<span 
-								className="top-[50%] translate-y-[-50%] absolute left-3 text-gray-300 flex items-center gap-2"
+								className="top-[50%] translate-y-[-50%] absolute left-3 text-gray-300 text-sm md:text-base flex items-center gap-2"
 							>
 								<FaLock />
 								
@@ -128,7 +128,7 @@ const AuthSignUpForm = ({ setForm, setValidateMessage }) => {
 
 				<button 
 					type="submit"
-					className={`mt-5 w-full text-white bg-purple-500 rounded-full py-3 font-semibold cursor-pointer transition-all duration-300 hover:bg-purple-800 max-w-100 flex justify-center items-center gap-3 ${emailMutation.isLoading && "bg-purple-800"}`	}
+					className={`mt-5 text-sm md:text-base w-full text-white bg-purple-500 rounded-full py-2 md:py-3 font-semibold cursor-pointer transition-all duration-300 hover:bg-purple-800 max-w-100 flex justify-center items-center gap-3 ${emailMutation.isLoading && "bg-purple-800"}`	}
 					disabled={emailMutation.isLoading}
 				>
 					Войти
@@ -140,10 +140,10 @@ const AuthSignUpForm = ({ setForm, setValidateMessage }) => {
 				</button>
 
 				<div className="flex flex-col gap-4 w-full max-w-100">
-					<div className="flex items-center gap-3 mt-10">
+					<div className="flex items-center gap-3 mt-6 md:mt-10">
 						<span className='w-full h-[1px] bg-white opacity-10' />
 
-						<span className='flex-none text-white'>
+						<span className='flex-none text-white text-sm md:text-base'>
 							Или продолжите с
 						</span>
 
@@ -155,12 +155,16 @@ const AuthSignUpForm = ({ setForm, setValidateMessage }) => {
 							className='bg-gray-900 rounded-lg border-1 border-[#ffffff30] p-2 cursor-pointer transition-all duration-300 hover:brightness-125'
 							onClick={handleGoogleSign}
 						>
-							<img src="/images/google_icon.svg" alt="google" width={32} />
+							<img 
+								src="/images/google_icon.svg" 
+								alt="google" 
+								className='md:w-8 w-6'
+							/>
 						</button>
 					</div>
 				</div>
 
-				<p className='text-white flex gap-1 items-center mt-8'>
+				<p className='text-white flex flex-wrap justify-center gap-1 items-center mt-4 md:mt-8'>
 					Ещё нет аккаунта?
 					<button 
 						className='text-purple-500 cursor-pointer'

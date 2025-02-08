@@ -9,7 +9,7 @@ const ProfilePage = () => {
 	return (
 		<Layout>
 			<ProfileDetails />
-			<ProfileCarousel title={historyTitle} />
+			{/* <ProfileCarousel title={historyTitle} /> */}
 			<ProfileCarousel title={favoritesTitle} />
 		</Layout>
 	)

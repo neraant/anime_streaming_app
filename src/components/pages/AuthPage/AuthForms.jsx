@@ -39,18 +39,18 @@ const AuthForms = () => {
 				</p>
 			</div>
 
-			<section className='h-full overflow-y-auto py-5'>
+			<section className='max-h-[100dvh] pb-4'>
 				<div className="screen-max-width">
-					<div className="w-full min-h-[calc(100dvh-226px)] flex flex-col items-center overflow-hidden">
+					<div className="w-full h-full flex flex-col items-center overflow-hidden">
 						<img 
 							ref={logoRef}
 							src="/images/logo.svg" 
 							alt="logotype" 
-							className='w-full max-w-50 transition-all duration-600'
+							className='w-full max-w-30 md:max-w-50 transition-all duration-600'
 						/>
 						
 						<div 
-							className="w-full h-full flex-center transition-all duration-600 ease-in-out"
+							className="w-full h-full flex justify-center md:items-center transition-all duration-600 ease-in-out"
 							style={{translate: `${form * 50}%`,}}
 						>
 							<AuthSignInForm 

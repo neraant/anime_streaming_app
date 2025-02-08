@@ -57,42 +57,44 @@ const ProfileCarousel = ({ title, content }) => {
 	return (
 		<section className='my-12'>
 			<div className="screen-max-width">
-				<div className="flex flex-col gap-4">
-					<h5 className='text-white font-semibold text-xl'>
-						{title}
-					</h5>
+				{favoritesList && favoritesList.length && (
+					<div className="flex flex-col gap-4">
+						<h5 className='text-white font-semibold text-xl'>
+							{title}
+						</h5>
 
-					<div className="relative">
-						<div 
-							className='w-full flex gap-2 transition-all ease-in-out duration-500'
-							style={{ transform: `translateX(-${curSlide * slideWidth}px)` }}
-							ref={carouselRef}
-						>
-							{favoritesList && favoritesList.map(({anime: anime}, index) => (
-								<ProfileCarouselItem
-									key={index}
-									anime={anime}
-								/>
-							))}
-						</div>
-
-						<div>
-							<button 
-								className='absolute top-[50%] left-0 translate-y-[-50%] cursor-pointer'
-								onClick={prevSlide}
+						<div className="relative">
+							<div 
+								className='w-full flex gap-2 transition-all ease-in-out duration-500'
+								style={{ transform: `translateX(-${curSlide * slideWidth}px)` }}
+								ref={carouselRef}
 							>
-								<FaChevronLeft color='white' size={30} />
-							</button>
+								{favoritesList && favoritesList.map(({anime: anime}, index) => (
+									<ProfileCarouselItem
+										key={index}
+										anime={anime}
+									/>
+								))}
+							</div>
 
-							<button 
-								className='absolute top-[50%] right-0 translate-y-[-50%] cursor-pointer'
-								onClick={nextSlide}
-							>
-								<FaChevronRight color='white' size={30} />
-							</button>
+							<div>
+								<button 
+									className='absolute top-[50%] left-0 translate-y-[-50%] cursor-pointer'
+									onClick={prevSlide}
+								>
+									<FaChevronLeft color='white' size={30} />
+								</button>
+
+								<button 
+									className='absolute top-[50%] right-0 translate-y-[-50%] cursor-pointer'
+									onClick={nextSlide}
+								>
+									<FaChevronRight color='white' size={30} />
+								</button>
+							</div>
 						</div>
 					</div>
-				</div>
+				)}
 			</div>
 		</section>
 	)
