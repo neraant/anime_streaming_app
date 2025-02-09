@@ -44,7 +44,7 @@ const useEpisodes = (anime, handleEpisodeChange) => {
 	const handleEpisodes = useCallback((type, key = null) => {
 		setEpisodes(prev => {
 			let newOffset = prev.episodesOffset
-		
+
 			switch (type) {
 				case "next": {
 					if (prev.episodesOffsetWidth > 0 && newOffset < maxOffset) {
@@ -59,6 +59,7 @@ const useEpisodes = (anime, handleEpisodeChange) => {
 					break;
 				}
 				case "change": {
+					console.log("Switching to episode: ", key);
 					return { 
 						...prev, 
 						activeEpisode: key 

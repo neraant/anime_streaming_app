@@ -2,8 +2,8 @@ import React from 'react'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import useEpisodes from '../../../../hooks/player/useEpisodes'
 
-const EpisodeCarousel = ({ anime, episodeInfo }) => {
-	const { episodes, episodesContainerRef, episodesListRef } = useEpisodes()
+const EpisodeCarousel = ({ anime, episodeInfo, handleEpisodeChange }) => {
+	const { episodes, episodesContainerRef, episodesListRef, handleEpisodes } = useEpisodes(anime, handleEpisodeChange)
 	
 	return (
 		<div 
