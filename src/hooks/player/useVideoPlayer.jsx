@@ -31,7 +31,7 @@ const useVideoPlayer = activeEpisode => {
 		endTime: '00:00',
 		isReady: false,
 		isControlVisible: true,
-		volume: parseFloat(localStorage.getItem('volume')) || 0.8,
+		volume: parseFloat(localStorage.getItem('volume')) || 1,
 		isMuted: false,
 		isBuffering: true
 	})
@@ -143,13 +143,16 @@ const useVideoPlayer = activeEpisode => {
 		}
 	}
 
-	const onKeyPressed = useCallback(e => {
-		const key = e.key
-		switch (key) {
-			case ' ':
-				e.preventDefault()
-				if (videoState.isReady) {
-					const video = videoRef.current?.getInternalPlayer()
+	const onKeyPressed = useCallback(
+		e => {
+			const key = e.key
+			if (!videoState.isReady) return
+
+			const video = videoRef.current?.getInternalPlayer()
+
+			switch (key) {
+				case ' ':
+					e.preventDefault()
 					if (video) {
 						if (video.paused) {
 							video.play()
@@ -162,12 +165,9 @@ const useVideoPlayer = activeEpisode => {
 							isControlVisible: pre.isPlaying ? true : false
 						}))
 					}
-				}
-				break
-			case 'ArrowUp':
-				e.preventDefault()
-				if (videoState.isReady) {
-					const video = videoRef.current?.getInternalPlayer()
+					break
+				case 'ArrowUp':
+					e.preventDefault()
 					if (video) {
 						const newVolume = Math.min(video.volume + 0.1, 1)
 						video.volume = newVolume
@@ -178,12 +178,9 @@ const useVideoPlayer = activeEpisode => {
 						}))
 						localStorage.setItem('volume', newVolume)
 					}
-				}
-				break
-			case 'ArrowDown':
-				e.preventDefault()
-				if (videoState.isReady) {
-					const video = videoRef.current?.getInternalPlayer()
+					break
+				case 'ArrowDown':
+					e.preventDefault()
 					if (video) {
 						const newVolume = Math.max(video.volume - 0.1, 0)
 						video.volume = newVolume
@@ -194,12 +191,9 @@ const useVideoPlayer = activeEpisode => {
 						}))
 						localStorage.setItem('volume', newVolume)
 					}
-				}
-				break
-			case 'ArrowLeft':
-				e.preventDefault()
-				if (videoState.isReady) {
-					const video = videoRef.current?.getInternalPlayer()
+					break
+				case 'ArrowLeft':
+					e.preventDefault()
 					if (video) {
 						video.currentTime = Math.min(video.currentTime - 10, video.duration)
 						setVideoState(pre => ({
@@ -207,12 +201,9 @@ const useVideoPlayer = activeEpisode => {
 							currentTime: formatTime(video.currentTime)
 						}))
 					}
-				}
-				break
-			case 'ArrowRight':
-				e.preventDefault()
-				if (videoState.isReady) {
-					const video = videoRef.current?.getInternalPlayer()
+					break
+				case 'ArrowRight':
+					e.preventDefault()
 					if (video) {
 						video.currentTime = Math.min(video.currentTime + 10, video.duration)
 						setVideoState(pre => ({
@@ -220,19 +211,20 @@ const useVideoPlayer = activeEpisode => {
 							currentTime: formatTime(video.currentTime)
 						}))
 					}
-				}
-				break
-			default:
-				break
-		}
-	}, [])
+					break
+				default:
+					break
+			}
+		},
+		[videoState.isReady]
+	)
 
 	useEffect(() => {
 		const handleKeyDown = e => onKeyPressed(e)
-
+		console.log('rednder')
 		window.addEventListener('keydown', handleKeyDown)
 		return () => window.removeEventListener('keydown', handleKeyDown)
-	}, [onKeyPressed])
+	}, [onKeyPressed, videoState.isReady])
 
 	// Controll video controls
 	useEffect(() => {

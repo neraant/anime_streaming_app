@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 * {
 	box-sizing: border-box;
@@ -6,19 +6,19 @@
 
 @theme {
 	--color-gray-900: #0f0f11;
-	--color-gray-800: #18181B;
-	--color-gray-700: #6C6C6C;
+	--color-gray-800: #18181b;
+	--color-gray-700: #6c6c6c;
 	--color-gray-500: #848484;
 	--color-gray-400: #828282;
-	--color-gray-300: #8F8F8F;
+	--color-gray-300: #8f8f8f;
 }
 
 .gradient-border {
-	@apply bg-gradient-to-r from-[#19A1BE] to-[#7D4192]
+	@apply bg-gradient-to-r from-[#19A1BE] to-[#7D4192];
 }
 
 .flex-center {
-	@apply flex items-center justify-center 
+	@apply flex items-center justify-center;
 }
 
 html {
@@ -30,9 +30,9 @@ body {
 	max-width: 100vw;
 	overflow-x: hidden;
 
-	font-family: "Montserrat", serif;
+	font-family: 'Montserrat', serif;
 
-	@apply bg-gray-800
+	@apply bg-gray-800;
 }
 body.sidebar {
 	overflow: hidden;
@@ -68,7 +68,7 @@ textarea::-webkit-scrollbar-track {
 
 #ai-box::-webkit-scrollbar-thumb,
 textarea::-webkit-scrollbar-thumb {
-	background: #6C6C6C !important;
+	background: #6c6c6c !important;
 	border-radius: 5px !important;
 }
 
@@ -82,54 +82,78 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 
 /* Custom video track */
-input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
-  width: 100%;
+input[type='range'] {
+	-webkit-appearance: none;
+	appearance: none;
+	background: transparent;
+	cursor: pointer;
+	width: 100%;
 }
-input[type="range"]:focus {
-  outline: none;
+input[type='range']:focus {
+	outline: none;
 }
-input[type="range"].video-volume {
-  width: 60px;
+input[type='range'].video-volume {
+	width: 60px;
 }
 
 /* Chrome, Safari, Opera, and Edge Chromium */
-input[type="range"]::-webkit-slider-runnable-track {
-	background: linear-gradient(to right, #9333ea 0%, #9333ea var(--progress), #444 var(--progress), #444 100%);
+input[type='range']::-webkit-slider-runnable-track {
+	background: linear-gradient(
+		to right,
+		#9333ea 0%,
+		#9333ea var(--progress),
+		#444 var(--progress),
+		#444 100%
+	);
 	height: 8px;
 	border-radius: 8px;
 }
 input.video-volume::-webkit-slider-runnable-track {
-	background: linear-gradient(to right, #9333ea 0%, #9333ea var(--volume), #444 var(--volume), #444 100%);
+	background: linear-gradient(
+		to right,
+		#9333ea 0%,
+		#9333ea var(--volume),
+		#444 var(--volume),
+		#444 100%
+	);
 	width: 60px;
 }
 /* Firefox  */
-input[type="range"]::-moz-range-track {
-	background: linear-gradient(to right, #9333ea 0%, #9333ea var(--progress), #444 var(--progress), #444 100%);
+input[type='range']::-moz-range-track {
+	background: linear-gradient(
+		to right,
+		#9333ea 0%,
+		#9333ea var(--progress),
+		#444 var(--progress),
+		#444 100%
+	);
 	height: 8px;
 	border-radius: 8px;
 }
 input.video-volume::-moz-range-track {
-	background: linear-gradient(to right, #9333ea 0%, #9333ea var(--volume), #444 var(--volume), #444 100%);
+	background: linear-gradient(
+		to right,
+		#9333ea 0%,
+		#9333ea var(--volume),
+		#444 var(--volume),
+		#444 100%
+	);
 	width: 60px;
 }
 
 /* Chrome, Safari, Opera, and Edge Chromium */
-input[type="range"]:focus::-webkit-slider-thumb {
-  border: none;
-  outline: none;
+input[type='range']:focus::-webkit-slider-thumb {
+	border: none;
+	outline: none;
 }
 /* Firefox */
-input[type="range"]:focus::-moz-range-thumb {
-  border: none;
-  outline: none;  
+input[type='range']:focus::-moz-range-thumb {
+	border: none;
+	outline: none;
 }
 
 /* Chrome, Safari, Opera, and Edge Chromium */
-input[type="range"]::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	appearance: none;
 	position: relative;
@@ -137,11 +161,11 @@ input[type="range"]::-webkit-slider-thumb {
 	transform: translateY(-50%);
 	background-color: white;
 	height: 14px;
-	width: 14px;    
+	width: 14px;
 	border-radius: 50%;
 }
 /* Firefox */
-input[type="range"]::-moz-range-thumb {
+input[type='range']::-moz-range-thumb {
 	-webkit-appearance: none;
 	appearance: none;
 	position: relative;
@@ -149,10 +173,18 @@ input[type="range"]::-moz-range-thumb {
 	transform: translateY(-50%);
 	background-color: white;
 	height: 14px;
-	width: 14px;    
+	width: 14px;
 	border-radius: 50%;
 }
 
 #ai-box {
 	scrollbar-width: thin;
+}
+
+.swiper-slide {
+	overflow: hidden;
+	border-radius: 16px;
+}
+.swiper {
+	overflow: visible !important;
 }

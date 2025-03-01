@@ -11,6 +11,7 @@ import './index.css'
 import AnimeSearch from './pages/AnimeSearch.jsx'
 import AuthPage from './pages/AuthPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
+import ScrollToTop from './components/common/ScrollToTop.jsx'
 
 // pages with lazy loading
 const Home = lazy(() => import('./pages/Home'))
@@ -23,72 +24,86 @@ const queryClient = new QueryClient()
 
 // react router
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: 
-      <Suspense fallback={<Preloader />} >
-        <App />
-      </Suspense>,
-    errorElement: <NotFound />,
-  },
-  {
-    path: '/anime',
-    element: 
-      <Suspense fallback={<Preloader />} >
-        <Home />
-      </Suspense>,
-    errorElement: <NotFound />,
-  },
-  {
-    path: '/anime/search',
-    element: 
-      <Suspense fallback={<Preloader />} >
-        <AnimeSearch />
-      </Suspense>,
-    errorElement: <NotFound />,
-  },
-  {
-    path: '/anime/:id',
-    element: 
-      <Suspense fallback={<Preloader />} >
-        <AnimePage />
-      </Suspense>,
-    errorElement: <NotFound />,
-  },
-  {
-    path: '/profile',
-    element: 
-      <PrivateRoutes>
-        <Suspense fallback={<Preloader />} >
-          <ProfilePage />
-        </Suspense>
-      </PrivateRoutes>,
-    errorElement: <NotFound />,
-  },
-  {
-    path: '/sign',
-    element: 
-      <Suspense fallback={<Preloader />} >
-        <AuthPage />
-      </Suspense>,
-    errorElement: <NotFound />,
-  },
-  {
-    path: '/aiAssistant',
-    element: 
-      <Suspense fallback={<Preloader />} >
-        <AiPage />
-      </Suspense>,
-    errorElement: <NotFound />,
-  },
+	{
+		path: '/',
+		element: (
+			<Suspense fallback={<Preloader />}>
+				<ScrollToTop />
+				<App />
+			</Suspense>
+		),
+		errorElement: <NotFound />
+	},
+	{
+		path: '/anime',
+		element: (
+			<Suspense fallback={<Preloader />}>
+				<ScrollToTop />
+				<Home />
+			</Suspense>
+		),
+		errorElement: <NotFound />
+	},
+	{
+		path: '/anime/search',
+		element: (
+			<Suspense fallback={<Preloader />}>
+				<ScrollToTop />
+				<AnimeSearch />
+			</Suspense>
+		),
+		errorElement: <NotFound />
+	},
+	{
+		path: '/anime/:id',
+		element: (
+			<Suspense fallback={<Preloader />}>
+				<ScrollToTop />
+				<AnimePage />
+			</Suspense>
+		),
+		errorElement: <NotFound />
+	},
+	{
+		path: '/profile',
+		element: (
+			<PrivateRoutes>
+				<Suspense fallback={<Preloader />}>
+					<ScrollToTop />
+					<ProfilePage />
+				</Suspense>
+			</PrivateRoutes>
+		),
+		errorElement: <NotFound />
+	},
+	{
+		path: '/sign',
+		element: (
+			<Suspense fallback={<Preloader />}>
+				<ScrollToTop />
+				<AuthPage />
+			</Suspense>
+		),
+		errorElement: <NotFound />
+	},
+	{
+		path: '/aiAssistant',
+		element: (
+			<Suspense fallback={<Preloader />}>
+				<ScrollToTop />
+				<AiPage />
+			</Suspense>
+		),
+		errorElement: <NotFound />
+	}
 ])
 
 createRoot(document.getElementById('root')).render(
-    <SidebarProvider>
-      <QueryClientProvider client={queryClient}>
-        <UserProvider>
-          <RouterProvider router={router} />
-        </UserProvider>
-      </QueryClientProvider>
-    </SidebarProvider>
+	<SidebarProvider>
+		<QueryClientProvider client={queryClient}>
+			<UserProvider>
+				<RouterProvider router={router} />
+			</UserProvider>
+		</QueryClientProvider>
+	</SidebarProvider>
 )
