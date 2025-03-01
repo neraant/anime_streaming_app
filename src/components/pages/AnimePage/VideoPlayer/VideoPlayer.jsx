@@ -79,6 +79,7 @@ const VideoPlayer = ({
 							? showPreview
 							: togglePlay
 					}
+					onDoubleClick={toggleFullscreen}
 					onMouseMove={videoState.isPlaying ? resetTimer : null}
 					onTouchStart={() => {
 						resetTimer()
